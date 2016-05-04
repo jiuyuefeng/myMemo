@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="changedateview" type="id">changedateview</item>
+    <item name="changecontentview" type="id">changecontentview</item>
+    <item name="writedate" type="id">writedate</item>
+    <item name="edittext" type="id">edittext</item>
+</resources>

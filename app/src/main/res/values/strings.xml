@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">便签</string>
+    <string name="action_settings">action_settings</string>
+    <string name="Create_memo">Create memo</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Save">Save</string>
+</resources>
