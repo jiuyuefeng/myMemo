@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         this.numberButton = ((Button) findViewById(R.id.number));
         this.topButton = ((Button) findViewById(R.id.topButton));
         this.listView = ((ListView) findViewById(R.id.listView));
