@@ -176,7 +176,7 @@ public class NotepadAdapter extends BaseAdapter {
             b.putString("idItem", (String) list.get(position).get("idItem"));
             b.putInt("backgroundItem",(Integer) list.get(position).get("backgroundItem"));
             //Log.d("bg",String.valueOf(bg_id));
-            Intent intent = new Intent((MainActivity) context,
+            Intent intent = new Intent(context,
                     EditActivity.class);
             intent.putExtras(b);
             ((MainActivity) context).startActivity(intent);

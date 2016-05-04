@@ -47,6 +47,7 @@ public class EditActivity extends BaseActivity {
 
 
         String edittext=editText.getText().toString();
+
         if(edittext==null)//编辑新建页
         {
             this.dateNow=new Date();
