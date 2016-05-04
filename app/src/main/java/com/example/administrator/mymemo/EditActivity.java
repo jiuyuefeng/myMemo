@@ -20,7 +20,7 @@ public class EditActivity extends BaseActivity {
     private String date;
     private Date dateNow;
     private EditText editText;
-    private String id;
+    private String id=null;
     private Button sureButton;
     private Button yellowButton;//黄色背景
     private Button blueButton;//蓝色背景
@@ -48,7 +48,7 @@ public class EditActivity extends BaseActivity {
 
         String edittext=editText.getText().toString();
 
-        if(edittext==null)//编辑新建页
+        if(id==null)//编辑新建页
         {
             this.dateNow=new Date();
             this.date=this.dateNow.getDate();
@@ -99,7 +99,7 @@ public class EditActivity extends BaseActivity {
         }
 
 
-    
+
         //设置背景
         this.yellowButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +174,12 @@ public class EditActivity extends BaseActivity {
                 localNotepad.setid(id);
                 localNotepad.setBackground(bg_id);
                 System.out.println("-----id-----id=" + id);
+                if(id==null){
+                    localChangeSqlite.add(localSqLiteDatabase, localNotepad);
+                }
+                else{
                 localChangeSqlite.update(localSqLiteDatabase, localNotepad);
+                }
                 finish();
             }
         });

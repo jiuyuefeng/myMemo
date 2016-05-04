@@ -1,7 +1,6 @@
 package com.example.administrator.mymemo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +21,6 @@ public class WriteActivity extends BaseActivity {
     private Date getDate;
     private Button sureButton;
     private TextView textView;
-    private SharedPreferences mysp;
 
     private Button yellowButton;//黄色背景
     private Button blueButton;//蓝色背景
