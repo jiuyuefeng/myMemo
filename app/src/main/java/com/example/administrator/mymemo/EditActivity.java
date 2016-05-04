@@ -99,8 +99,8 @@ public class EditActivity extends BaseActivity {
         }
 
 
-
-        //设置背景 
+    
+        //设置背景
         this.yellowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
