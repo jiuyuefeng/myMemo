@@ -46,18 +46,29 @@ public class EditActivity extends BaseActivity {
         this.redButton= ((Button)findViewById(R.id.redbutton));
 
 
-        this.date = getIntent().getStringExtra("dateItem");
-        this.content = getIntent().getStringExtra("contentItem");
-        this.id = getIntent().getStringExtra("idItem");
-        this.bg_id=getIntent().getIntExtra("backgroundItem",0);//获取当前背景ID
+        String edittext=editText.getText().toString();
+        if(edittext==null)//编辑新建页
+        {
+            this.dateNow=new Date();
+            this.date=this.dateNow.getDate();
+            this.textView.setText(this.date);
+        }
 
-        System.out.println("-----idItem-----id=" + id);
-        this.editText.setSelection(this.editText.length());
-        this.editText.setText(this.content);
-        this.textView.setText(this.date);
-        this.dateNow = new Date();
-        this.date = this.dateNow.getDate();
-        this.textView.setText(this.date);
+        else //编辑已有页
+        {
+            this.date = getIntent().getStringExtra("dateItem");
+            this.content = getIntent().getStringExtra("contentItem");
+            this.id = getIntent().getStringExtra("idItem");
+            this.bg_id = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
+
+            System.out.println("-----idItem-----id=" + id);
+            this.editText.setSelection(this.editText.length());
+            this.editText.setText(this.content);
+            this.textView.setText(this.date);
+            this.dateNow = new Date();
+            this.date = this.dateNow.getDate();
+            this.textView.setText(this.date);
+        }
 
         //显示编辑前的背景
         if(bg_id==1)
@@ -150,7 +161,7 @@ public class EditActivity extends BaseActivity {
                 String strContent = EditActivity.this.editText.getText()
                         .toString();
                 if (strContent.equals("")) {
-                    Toast.makeText(EditActivity.this.context, "����Ϊ��",
+                    Toast.makeText(EditActivity.this.context, "请输入内容",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }

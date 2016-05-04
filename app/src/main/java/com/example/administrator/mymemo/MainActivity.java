@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,
-                        WriteActivity.class);
+                        EditActivity.class);
                 startActivity(intent);
             }
         });
