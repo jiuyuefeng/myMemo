@@ -76,24 +76,24 @@ public class NotepadAdapter extends BaseAdapter {
 
             //设置背景
             if(bg_id==1) {
-                setShow.contentView.setBackgroundResource(R.drawable.yellow);
-                setShow.dateView.setBackgroundResource(R.drawable.yellowtop);
+                setShow.contentView.setBackgroundResource(R.drawable.bg_yellow);
+                setShow.dateView.setBackgroundResource(R.drawable.bg_yellowtop);
             }
             if(bg_id==2) {
-                setShow.contentView.setBackgroundResource(R.drawable.blue);
-                setShow.dateView.setBackgroundResource(R.drawable.bluetop);
+                setShow.contentView.setBackgroundResource(R.drawable.bg_blue);
+                setShow.dateView.setBackgroundResource(R.drawable.bg_bluetop);
             }
             if(bg_id==3) {
-                setShow.contentView.setBackgroundResource(R.drawable.white);
-                setShow.dateView.setBackgroundResource(R.drawable.whitetop);
+                setShow.contentView.setBackgroundResource(R.drawable.bg_white);
+                setShow.dateView.setBackgroundResource(R.drawable.bg_whitetop);
             }
             if(bg_id==4) {
-                setShow.contentView.setBackgroundResource(R.drawable.green);
-                setShow.dateView.setBackgroundResource(R.drawable.greentop);
+                setShow.contentView.setBackgroundResource(R.drawable.bg_green);
+                setShow.dateView.setBackgroundResource(R.drawable.bg_greentop);
             }
             if(bg_id==5) {
-                setShow.contentView.setBackgroundResource(R.drawable.red);
-                setShow.dateView.setBackgroundResource(R.drawable.redtop);
+                setShow.contentView.setBackgroundResource(R.drawable.bg_red);
+                setShow.dateView.setBackgroundResource(R.drawable.bg_redtop);
             }
 
             setShow.contentView.setText("   " + str);
@@ -119,24 +119,24 @@ public class NotepadAdapter extends BaseAdapter {
 
             //设置背景
             if(bg_id==1) {
-                setShow.cContentView.setBackgroundResource(R.drawable.yellow);
-                setShow.cDateView.setBackgroundResource(R.drawable.yellowtop);
+                setShow.cContentView.setBackgroundResource(R.drawable.bg_yellow);
+                setShow.cDateView.setBackgroundResource(R.drawable.bg_yellowtop);
             }
             if(bg_id==2) {
-                setShow.cContentView.setBackgroundResource(R.drawable.blue);
-                setShow.cDateView.setBackgroundResource(R.drawable.bluetop);
+                setShow.cContentView.setBackgroundResource(R.drawable.bg_blue);
+                setShow.cDateView.setBackgroundResource(R.drawable.bg_bluetop);
             }
             if(bg_id==3) {
-                setShow.cContentView.setBackgroundResource(R.drawable.white);
-                setShow.cDateView.setBackgroundResource(R.drawable.whitetop);
+                setShow.cContentView.setBackgroundResource(R.drawable.bg_white);
+                setShow.cDateView.setBackgroundResource(R.drawable.bg_whitetop);
             }
             if(bg_id==4) {
-                setShow.cContentView.setBackgroundResource(R.drawable.green);
-                setShow.cDateView.setBackgroundResource(R.drawable.greentop);
+                setShow.cContentView.setBackgroundResource(R.drawable.bg_green);
+                setShow.cDateView.setBackgroundResource(R.drawable.bg_greentop);
             }
             if(bg_id==5) {
-                setShow.cContentView.setBackgroundResource(R.drawable.red);
-                setShow.cDateView.setBackgroundResource(R.drawable.redtop);
+                setShow.cContentView.setBackgroundResource(R.drawable.bg_red);
+                setShow.cDateView.setBackgroundResource(R.drawable.bg_redtop);
             }
 
             setShow.cContentView.setText("" + str);

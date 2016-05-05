@@ -79,24 +79,24 @@ public class EditActivity extends BaseActivity {
 
         //显示编辑前的背景
         if(bg_id==1) {
-            editText.setBackgroundResource(R.drawable.yellow);
-            textView.setBackgroundResource(R.drawable.yellowtop);
+            editText.setBackgroundResource(R.drawable.bg_yellow);
+            textView.setBackgroundResource(R.drawable.bg_yellowtop);
         }
         if(bg_id==2) {
-            editText.setBackgroundResource(R.drawable.blue);
-            textView.setBackgroundResource(R.drawable.bluetop);
+            editText.setBackgroundResource(R.drawable.bg_blue);
+            textView.setBackgroundResource(R.drawable.bg_bluetop);
         }
         if(bg_id==3) {
-            editText.setBackgroundResource(R.drawable.white);
-            textView.setBackgroundResource(R.drawable.whitetop);
+            editText.setBackgroundResource(R.drawable.bg_white);
+            textView.setBackgroundResource(R.drawable.bg_whitetop);
         }
         if(bg_id==4) {
-            editText.setBackgroundResource(R.drawable.green);
-            textView.setBackgroundResource(R.drawable.greentop);
+            editText.setBackgroundResource(R.drawable.bg_green);
+            textView.setBackgroundResource(R.drawable.bg_greentop);
         }
         if(bg_id==5) {
-            editText.setBackgroundResource(R.drawable.red);
-            textView.setBackgroundResource(R.drawable.redtop);
+            editText.setBackgroundResource(R.drawable.bg_red);
+            textView.setBackgroundResource(R.drawable.bg_redtop);
         }
 
 
@@ -105,8 +105,8 @@ public class EditActivity extends BaseActivity {
         this.yellowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView.setBackgroundResource(R.drawable.yellowtop);
-                editText.setBackgroundResource(R.drawable.yellow);
+                textView.setBackgroundResource(R.drawable.bg_yellowtop);
+                editText.setBackgroundResource(R.drawable.bg_yellow);
                 bg_id=1;
             }
         });
@@ -114,8 +114,8 @@ public class EditActivity extends BaseActivity {
         this.blueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView.setBackgroundResource(R.drawable.bluetop);
-                editText.setBackgroundResource(R.drawable.blue);
+                textView.setBackgroundResource(R.drawable.bg_bluetop);
+                editText.setBackgroundResource(R.drawable.bg_blue);
                 bg_id=2;
             }
         });
@@ -123,8 +123,8 @@ public class EditActivity extends BaseActivity {
         this.whiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView.setBackgroundResource(R.drawable.whitetop);
-                editText.setBackgroundResource(R.drawable.white);
+                textView.setBackgroundResource(R.drawable.bg_whitetop);
+                editText.setBackgroundResource(R.drawable.bg_white);
                 bg_id=3;
             }
         });
@@ -132,8 +132,8 @@ public class EditActivity extends BaseActivity {
         this.greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView.setBackgroundResource(R.drawable.greentop);
-                editText.setBackgroundResource(R.drawable.green);
+                textView.setBackgroundResource(R.drawable.bg_greentop);
+                editText.setBackgroundResource(R.drawable.bg_green);
                 bg_id=4;
             }
         });
@@ -141,8 +141,8 @@ public class EditActivity extends BaseActivity {
         this.redButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView.setBackgroundResource(R.drawable.redtop);
-                editText.setBackgroundResource(R.drawable.red);
+                textView.setBackgroundResource(R.drawable.bg_redtop);
+                editText.setBackgroundResource(R.drawable.bg_red);
                 bg_id=5;
             }
         });

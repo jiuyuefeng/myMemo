@@ -12,13 +12,13 @@
         android:textSize="30sp"
         android:gravity="center_horizontal"
         android:paddingTop="5dp"
-        android:background="@drawable/title_background"
+        android:background="@drawable/bg_title"
         android:text="@string/Create_memo"
         android:id="@+id/title_text_show"
         android:layout_alignParentTop="true" />
     <Button
         android:textColor="#ffffffff"
-        android:background="@drawable/imagebutton_background"
+        android:background="@drawable/img_add_button"
         android:layout_marginLeft="7dp"
         android:layout_width="55dp"
         android:layout_height="55dp"
