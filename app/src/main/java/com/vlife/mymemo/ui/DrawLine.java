@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,8 +17,6 @@ public class DrawLine extends EditText {
         super(context, attrs);
 
         ePaint = new Paint();
-
-        // rect=new Rect();
         ePaint.setColor(Color.BLACK);
         ePaint.setStyle(Paint.Style.STROKE);
     }
@@ -29,8 +27,6 @@ public class DrawLine extends EditText {
             float[] pts = { 15.0F, (i + 1) * getLineHeight(),
                     this.getWidth() - 20.0F, (i + 1) * getLineHeight() };
 
-            // i*50-280,50�������м���285�������߿��ϡ�
-            // canvas.drawLine(15, i*42, this.getWidth()-20,i*42, ePaint);
             canvas.drawLines(pts, ePaint);
         }
         super.onDraw(canvas);

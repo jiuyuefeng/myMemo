@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.mainactivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.example.administrator.mymemo.R;
+import com.vlife.mymemo.sqlite.ChangeSqlite;
+import com.vlife.mymemo.adapter.Notepad;
+import com.vlife.mymemo.adapter.NotepadAdapter;
+import com.vlife.mymemo.sqlite.SqliteHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +35,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         this.numberButton = ((Button) findViewById(R.id.number));
         this.topButton = ((Button) findViewById(R.id.topButton));
@@ -76,17 +81,16 @@ public class MainActivity extends Activity {
                 }
                 return;
             }
-            Notepad localNotepad = (Notepad) localIterator.next();
-            HashMap<String, Object> localHashMap = new HashMap<String, Object>();
+            Notepad localNotepad = localIterator.next();
+            HashMap<String, Object> localHashMap = new HashMap<>();
             localHashMap.put("titleItem", localNotepad.getTitle());
-            localHashMap.put("dateItem", localNotepad.getdata());
+            localHashMap.put("dateItem", localNotepad.getData());
             localHashMap.put("contentItem", localNotepad.getContent());
-            localHashMap.put("idItem", localNotepad.getid());
+            localHashMap.put("idItem", localNotepad.getId());
             localHashMap.put("backgroundItem",localNotepad.getBackground());
-            localHashMap.put("EXPANDED", Boolean.valueOf(true));
+            localHashMap.put("EXPANDED", true);
             this.itemList.add(localHashMap);
             this.number = this.itemList.size();
-            System.out.println(1+ number);
             this.numberButton.setText("(" + this.number + ")");
         }
 
@@ -98,7 +102,7 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> paramAdapterView,
                                 View paramView, int paramInt, long paramLong) {
-            System.out.println("item----------click");
+            //System.out.println("item----------click");
 
             Bundle bundle=new Bundle();
             Map<String, Object> localMap = MainActivity.this.itemList
@@ -121,7 +125,5 @@ public class MainActivity extends Activity {
         }
 
     }
-
-
 
 }

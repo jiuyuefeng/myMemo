@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;

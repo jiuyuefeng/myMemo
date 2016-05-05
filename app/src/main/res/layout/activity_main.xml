@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffefd5"
-    tools:context="com.example.administrator.mymemo.MainActivity">
+    tools:context="com.vlife.mymemo.mainactivity.MainActivity">
 
     <TextView
         android:layout_width="match_parent"

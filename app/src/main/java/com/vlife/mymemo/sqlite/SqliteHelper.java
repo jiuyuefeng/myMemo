@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.sqlite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

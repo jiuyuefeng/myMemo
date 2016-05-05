@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.date;
 
 import java.util.Calendar;
 
@@ -17,7 +17,5 @@ public class Date {
          int second = c.get(Calendar.SECOND);
          return year + "-" + month + "-" + date + "           " +hour + ":"
          +minute + ":" + second;
-
-
     }
 }

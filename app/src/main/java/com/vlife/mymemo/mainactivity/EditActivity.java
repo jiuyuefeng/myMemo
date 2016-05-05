@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.mainactivity;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,6 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.administrator.mymemo.R;
+import com.vlife.mymemo.sqlite.ChangeSqlite;
+import com.vlife.mymemo.date.Date;
+import com.vlife.mymemo.ui.DrawLine;
+import com.vlife.mymemo.adapter.Notepad;
+import com.vlife.mymemo.sqlite.SqliteHelper;
 
 /**
  * Created by Administrator on 2016/4/27 0027.
@@ -48,16 +55,14 @@ public class EditActivity extends BaseActivity {
 
         this.id = getIntent().getStringExtra("idItem");
         //String edittext=editText.getText().toString();
-
-        if(id==null)//编辑新建页
-        {
+        //编辑新建页
+        if(id==null){
             this.dateNow=new Date();
             this.date=this.dateNow.getDate();
             this.textView.setText(this.date);
         }
-
-        else //编辑已有页
-        {
+        //编辑已有页
+        else{
             this.date = getIntent().getStringExtra("dateItem");
             this.content = getIntent().getStringExtra("contentItem");
             //this.id = getIntent().getStringExtra("idItem");
@@ -73,28 +78,23 @@ public class EditActivity extends BaseActivity {
         }
 
         //显示编辑前的背景
-        if(bg_id==1)
-        {
+        if(bg_id==1) {
             editText.setBackgroundResource(R.drawable.yellow);
             textView.setBackgroundResource(R.drawable.yellowtop);
         }
-        if(bg_id==2)
-        {
+        if(bg_id==2) {
             editText.setBackgroundResource(R.drawable.blue);
             textView.setBackgroundResource(R.drawable.bluetop);
         }
-        if(bg_id==3)
-        {
+        if(bg_id==3) {
             editText.setBackgroundResource(R.drawable.white);
             textView.setBackgroundResource(R.drawable.whitetop);
         }
-        if(bg_id==4)
-        {
+        if(bg_id==4) {
             editText.setBackgroundResource(R.drawable.green);
             textView.setBackgroundResource(R.drawable.greentop);
         }
-        if(bg_id==5)
-        {
+        if(bg_id==5) {
             editText.setBackgroundResource(R.drawable.red);
             textView.setBackgroundResource(R.drawable.redtop);
         }
@@ -171,8 +171,8 @@ public class EditActivity extends BaseActivity {
                         + strContent.substring(0, 11) : strContent;
                 localNotepad.setContent(strContent);
                 localNotepad.setTitle(strTitle);
-                localNotepad.setdata(date);
-                localNotepad.setid(id);
+                localNotepad.setData(date);
+                localNotepad.setId(id);
                 localNotepad.setBackground(bg_id);
                 System.out.println("-----id-----id=" + id);
                 if(id==null){

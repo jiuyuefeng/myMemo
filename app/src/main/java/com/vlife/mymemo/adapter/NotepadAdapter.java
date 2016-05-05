@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +14,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.administrator.mymemo.R;
+import com.vlife.mymemo.mainactivity.EditActivity;
+import com.vlife.mymemo.mainactivity.MainActivity;
+import com.vlife.mymemo.sqlite.ChangeSqlite;
+import com.vlife.mymemo.sqlite.SqliteHelper;
+import com.vlife.mymemo.ui.TextViewLine;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -23,7 +30,6 @@ import java.util.Map;
 public class NotepadAdapter extends BaseAdapter {
 
     public Context context;
-    public Context activity;
     public LayoutInflater inflater;
     public ArrayList<Map<String, Object>> list;
     public Integer bg_id=0;
@@ -56,10 +62,8 @@ public class NotepadAdapter extends BaseAdapter {
         SetShow setShow = new SetShow();
         Map<String, Object> map = list.get(arg0);
         boolean boo = (Boolean) map.get("EXPANDED");
-        if (!boo)
-        {
+        if (!boo) {
             arg1 = inflater.inflate(R.layout.showtypes, arg2, false);
-            //arg1.setBackground(list.get(arg0).get("backgroundItem"));
 
             setShow.contentView = (TextView) arg1
                     .findViewById(R.id.contentTextView);
@@ -70,28 +74,24 @@ public class NotepadAdapter extends BaseAdapter {
             bg_id= (Integer) list.get(arg0).get("backgroundItem");
 
 
-            if(bg_id==1)
-            {
+            //设置背景
+            if(bg_id==1) {
                 setShow.contentView.setBackgroundResource(R.drawable.yellow);
                 setShow.dateView.setBackgroundResource(R.drawable.yellowtop);
             }
-            if(bg_id==2)
-            {
+            if(bg_id==2) {
                 setShow.contentView.setBackgroundResource(R.drawable.blue);
                 setShow.dateView.setBackgroundResource(R.drawable.bluetop);
             }
-            if(bg_id==3)
-            {
+            if(bg_id==3) {
                 setShow.contentView.setBackgroundResource(R.drawable.white);
                 setShow.dateView.setBackgroundResource(R.drawable.whitetop);
             }
-            if(bg_id==4)
-            {
+            if(bg_id==4) {
                 setShow.contentView.setBackgroundResource(R.drawable.green);
                 setShow.dateView.setBackgroundResource(R.drawable.greentop);
             }
-            if(bg_id==5)
-            {
+            if(bg_id==5) {
                 setShow.contentView.setBackgroundResource(R.drawable.red);
                 setShow.dateView.setBackgroundResource(R.drawable.redtop);
             }
@@ -117,28 +117,24 @@ public class NotepadAdapter extends BaseAdapter {
             String dateStr = (String) list.get(arg0).get("dateItem");
             bg_id= (Integer) list.get(arg0).get("backgroundItem");
 
-            if(bg_id==1)
-            {
+            //设置背景
+            if(bg_id==1) {
                 setShow.cContentView.setBackgroundResource(R.drawable.yellow);
                 setShow.cDateView.setBackgroundResource(R.drawable.yellowtop);
             }
-            if(bg_id==2)
-            {
+            if(bg_id==2) {
                 setShow.cContentView.setBackgroundResource(R.drawable.blue);
                 setShow.cDateView.setBackgroundResource(R.drawable.bluetop);
             }
-            if(bg_id==3)
-            {
+            if(bg_id==3) {
                 setShow.cContentView.setBackgroundResource(R.drawable.white);
                 setShow.cDateView.setBackgroundResource(R.drawable.whitetop);
             }
-            if(bg_id==4)
-            {
+            if(bg_id==4) {
                 setShow.cContentView.setBackgroundResource(R.drawable.green);
                 setShow.cDateView.setBackgroundResource(R.drawable.greentop);
             }
-            if(bg_id==5)
-            {
+            if(bg_id==5) {
                 setShow.cContentView.setBackgroundResource(R.drawable.red);
                 setShow.cDateView.setBackgroundResource(R.drawable.redtop);
             }
@@ -168,7 +164,7 @@ public class NotepadAdapter extends BaseAdapter {
         public void onClick(View v) {
             // TODO Auto-generated method stub
 
-
+            //传递数据
             Bundle b = new Bundle();
             b.putString("contentItem",
                     (String) list.get(position).get("contentItem"));
@@ -179,8 +175,7 @@ public class NotepadAdapter extends BaseAdapter {
             Intent intent = new Intent(context,
                     EditActivity.class);
             intent.putExtras(b);
-            ((MainActivity) context).startActivity(intent);
-
+            (context).startActivity(intent);
 
         }
 
@@ -200,6 +195,7 @@ public class NotepadAdapter extends BaseAdapter {
 
             // TODO Auto-generated method stub
 
+            //listview的item删除
             android.app.AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("确定删除？");
             builder.setPositiveButton("删除",
@@ -213,11 +209,10 @@ public class NotepadAdapter extends BaseAdapter {
                             SQLiteDatabase dataBase = sql.getWritableDatabase();
                             ChangeSqlite change = new ChangeSqlite();
                             Notepad notepad = new Notepad();
-                            notepad.setid((String) list.get(position).get(
+                            notepad.setId((String) list.get(position).get(
                                     "idItem"));
                             change.delete(dataBase, notepad);
                             ((MainActivity) context).showUpdate();
-                            // a.showUpdate();
 
                         }
                     });

@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -23,10 +23,8 @@ public class TextViewLine extends TextView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int i=getLineCount();
-        for (int j = 0; ; ++j)
-        {
-            if (j >= i)
-            {
+        for (int j = 0; ; ++j) {
+            if (j >= i) {
                 super.onDraw(canvas);
                 return;
             }

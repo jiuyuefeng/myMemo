@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.mainactivity;
 
 import android.app.Activity;
 import android.content.Intent;

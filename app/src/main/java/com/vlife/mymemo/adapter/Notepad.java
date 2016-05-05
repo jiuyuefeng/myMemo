@@ -1,4 +1,4 @@
-package com.example.administrator.mymemo;
+package com.vlife.mymemo.adapter;
 
 /**
  * Created by Administrator on 2016/4/27 0027.
@@ -19,13 +19,11 @@ public class Notepad {
         return this.title;
     }
 
-    public String getdata() {
+    public String getData() {
         return this.data;
     }
 
-    public String getid() {
-        return this.id;
-    }
+    public String getId() {return this.id;}
 
     public Integer getBackground() {return this.background;}
 
@@ -37,11 +35,11 @@ public class Notepad {
         this.title = paramString;
     }
 
-    public void setdata(String paramString) {
+    public void setData(String paramString) {
         this.data = paramString;
     }
 
-    public void setid(String paramString) {this.id = paramString;}
+    public void setId(String paramString) {this.id = paramString;}
 
     public void setBackground(Integer integer) {this.background = integer;}
 
