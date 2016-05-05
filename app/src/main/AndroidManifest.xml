@@ -26,7 +26,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WriteActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".EditActivity" />
     </application>

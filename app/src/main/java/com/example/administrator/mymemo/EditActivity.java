@@ -46,7 +46,8 @@ public class EditActivity extends BaseActivity {
         this.redButton= ((Button)findViewById(R.id.redbutton));
 
 
-        String edittext=editText.getText().toString();
+        this.id = getIntent().getStringExtra("idItem");
+        //String edittext=editText.getText().toString();
 
         if(id==null)//编辑新建页
         {
@@ -59,10 +60,10 @@ public class EditActivity extends BaseActivity {
         {
             this.date = getIntent().getStringExtra("dateItem");
             this.content = getIntent().getStringExtra("contentItem");
-            this.id = getIntent().getStringExtra("idItem");
+            //this.id = getIntent().getStringExtra("idItem");
             this.bg_id = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
 
-            System.out.println("-----idItem-----id=" + id);
+            //System.out.println("-----idItem-----id=" + id);
             this.editText.setSelection(this.editText.length());
             this.editText.setText(this.content);
             this.textView.setText(this.date);
