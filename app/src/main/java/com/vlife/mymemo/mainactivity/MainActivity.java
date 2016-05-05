@@ -36,9 +36,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.numberButton = ((Button) findViewById(R.id.number));
-        this.topButton = ((Button) findViewById(R.id.topButton));
-        this.listView = ((ListView) findViewById(R.id.listView));
+        this.numberButton = ((Button) findViewById(R.id.number_button));
+        this.topButton = ((Button) findViewById(R.id.memo_add_button));
+        this.listView = ((ListView) findViewById(R.id.memo_list_show));
         this.listView.setDivider(null);
         this.listView.setOnItemClickListener(new ItemClick());
         this.topButton.setOnClickListener(new View.OnClickListener() {

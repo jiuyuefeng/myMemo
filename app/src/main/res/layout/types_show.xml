@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:background="#fff5ee"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,7 +10,7 @@
         android:layout_height="27dp"
         android:textColor="#000000"
         android:gravity="center"
-        android:id="@+id/dateTextView"
+        android:id="@+id/date_types_show"
         android:background="@drawable/shapetop"
         android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true"
@@ -20,8 +22,8 @@
         android:textSize="18sp"
         android:textColor="#ff000000"
         android:background="@drawable/showbottom"
-        android:id="@+id/contentTextView"
-        android:layout_below="@+id/dateTextView"
+        android:id="@+id/content_types_show"
+        android:layout_below="@+id/date_types_show"
         android:layout_centerHorizontal="true"
         />
 
@@ -29,22 +31,22 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="27dp"
         android:layout_height="27dp"
-        android:id="@+id/smallbutton1"
+        android:id="@+id/types_edit_button"
         android:background="@drawable/smallbutton1"
         android:focusable="false"
         android:layout_marginLeft="7dp"
-        android:layout_above="@id/contentTextView"
-        android:layout_alignLeft="@+id/contentTextView" />
+        android:layout_above="@id/content_types_show"
+        android:layout_alignLeft="@+id/content_types_show" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="27dp"
         android:layout_height="27dp"
-        android:id="@+id/smallbutton2"
+        android:id="@+id/types_delete_button"
         android:background="@drawable/smallbutton2"
         android:focusable="false"
         android:layout_marginRight="7dp"
-        android:layout_above="@id/contentTextView"
-        android:layout_alignRight="@id/contentTextView" />
+        android:layout_above="@id/content_types_show"
+        android:layout_alignRight="@id/content_types_show" />
 
 </RelativeLayout>

@@ -63,11 +63,11 @@ public class NotepadAdapter extends BaseAdapter {
         Map<String, Object> map = list.get(arg0);
         boolean boo = (Boolean) map.get("EXPANDED");
         if (!boo) {
-            arg1 = inflater.inflate(R.layout.showtypes, arg2, false);
+            arg1 = inflater.inflate(R.layout.types_show, arg2, false);
 
             setShow.contentView = (TextView) arg1
-                    .findViewById(R.id.contentTextView);
-            setShow.dateView = (TextView) arg1.findViewById(R.id.dateTextView);
+                    .findViewById(R.id.content_types_show);
+            setShow.dateView = (TextView) arg1.findViewById(R.id.date_types_show);
 
             String str = (String) list.get(arg0).get("titleItem");
             String dateStr = (String) list.get(arg0).get("dateItem");
@@ -99,20 +99,20 @@ public class NotepadAdapter extends BaseAdapter {
             setShow.contentView.setText("   " + str);
             setShow.dateView.setText(dateStr);
             setShow.showButtonWrite = (Button) arg1
-                    .findViewById(R.id.smallbutton1);
+                    .findViewById(R.id.types_edit_button);
             setShow.showButtonDelete = (Button) arg1
-                    .findViewById(R.id.smallbutton2);
+                    .findViewById(R.id.types_delete_button);
             setShow.showButtonWrite.setOnClickListener(new WriteButtonListener(
                     arg0));
             setShow.showButtonDelete
                     .setOnClickListener(new DeleteButtonListener(arg0));
         }
         else {
-            arg1 = inflater.inflate(R.layout.style, arg2, false);
+            arg1 = inflater.inflate(R.layout.style_show_listview, arg2, false);
             setShow.cContentView = (TextViewLine) arg1
-                    .findViewById(R.id.changecontentview);
+                    .findViewById(R.id.content_list_show);
             setShow.cDateView = (TextView) arg1
-                    .findViewById(R.id.changedateview);
+                    .findViewById(R.id.date_list_show);
             String str = (String) list.get(arg0).get("contentItem");
             String dateStr = (String) list.get(arg0).get("dateItem");
             bg_id= (Integer) list.get(arg0).get("backgroundItem");
@@ -142,11 +142,11 @@ public class NotepadAdapter extends BaseAdapter {
             setShow.cContentView.setText("" + str);
             setShow.cDateView.setText(dateStr);
             setShow.styleButtonWrite = (Button) arg1
-                    .findViewById(R.id.stylebutton1);
+                    .findViewById(R.id.content_edit_button);
             setShow.styleButtonWrite
                     .setOnClickListener(new WriteButtonListener(arg0));
             setShow.styleButtonDelete = (Button) arg1
-                    .findViewById(R.id.stylebutton2);
+                    .findViewById(R.id.content_delete_button);
             setShow.styleButtonDelete
                     .setOnClickListener(new DeleteButtonListener(arg0));
         }

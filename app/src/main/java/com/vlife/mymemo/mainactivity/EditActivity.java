@@ -40,17 +40,17 @@ public class EditActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
-        setContentView(R.layout.showedit);
-        this.textView = ((TextView) findViewById(R.id.editdate));//日期栏
-        this.editText = ((DrawLine) findViewById(R.id.edittexttwo));//文本栏
-        this.cancelButton = ((Button) findViewById(R.id.editbutton));
-        this.sureButton = ((Button) findViewById(R.id.editbutton2));
+        setContentView(R.layout.edit_show);
+        this.textView = ((TextView) findViewById(R.id.date_edit));//日期栏
+        this.editText = ((DrawLine) findViewById(R.id.content_edit));//文本栏
+        this.cancelButton = ((Button) findViewById(R.id.text_cancel_button));
+        this.sureButton = ((Button) findViewById(R.id.text_save_button));
 
-        this.yellowButton= ((Button)findViewById(R.id.yellowbutton));
-        this.blueButton= ((Button)findViewById(R.id.bluebutton));
-        this.whiteButton= ((Button)findViewById(R.id.whitebutton));
-        this.greenButton= ((Button)findViewById(R.id.greenbutton));
-        this.redButton= ((Button)findViewById(R.id.redbutton));
+        this.yellowButton= ((Button)findViewById(R.id.yellow_button));
+        this.blueButton= ((Button)findViewById(R.id.blue_button));
+        this.whiteButton= ((Button)findViewById(R.id.white_button));
+        this.greenButton= ((Button)findViewById(R.id.green_button));
+        this.redButton= ((Button)findViewById(R.id.red_button));
 
 
         this.id = getIntent().getStringExtra("idItem");

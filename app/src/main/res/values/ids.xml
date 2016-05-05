@@ -4,4 +4,6 @@
     <item name="changecontentview" type="id">changecontentview</item>
     <item name="writedate" type="id">writedate</item>
     <item name="edittext" type="id">edittext</item>
+    <item name="date_list_show" type="id">date_list_show</item>
+    <item name="content_list_show" type="id">content_list_show</item>
 </resources>
