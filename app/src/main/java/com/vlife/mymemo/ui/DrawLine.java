@@ -11,14 +11,14 @@ import android.widget.EditText;
  * Created by Administrator on 2016/4/27 0027.
  */
 public class DrawLine extends EditText {
-    private Paint ePaint;
+    private Paint paint;
 
     public DrawLine(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        ePaint = new Paint();
-        ePaint.setColor(Color.BLACK);
-        ePaint.setStyle(Paint.Style.STROKE);
+        paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
     }
 
     public void onDraw(Canvas canvas) {
@@ -27,7 +27,7 @@ public class DrawLine extends EditText {
             float[] pts = { 15.0F, (i + 1) * getLineHeight(),
                     this.getWidth() - 20.0F, (i + 1) * getLineHeight() };
 
-            canvas.drawLines(pts, ePaint);
+            canvas.drawLines(pts, paint);
         }
         super.onDraw(canvas);
     }

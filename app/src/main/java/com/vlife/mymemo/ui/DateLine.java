@@ -11,20 +11,20 @@ import android.widget.TextView;
  */
 public class DateLine extends TextView{
 
-    private Paint ePaint = new Paint();
+    private Paint paint = new Paint();
     public DateLine(Context context) {
         super(context);
     }
     public DateLine (Context context, AttributeSet attrs){
         super(context,attrs);
-        this.ePaint.setColor(16777216);
-        this.ePaint.setStyle(Paint.Style.STROKE);
+        this.paint.setColor(16777216);
+        this.paint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawLine(0.0F, 40.0F, getWidth(), 40.0F, this.ePaint);
+        canvas.drawLine(0.0F, 40.0F, getWidth(), 40.0F, this.paint);
         super.onDraw(canvas);
     }
 }

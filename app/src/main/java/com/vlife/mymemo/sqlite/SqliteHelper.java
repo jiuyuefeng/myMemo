@@ -11,7 +11,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     private static String INFONAME;
     private static String NAME;
-    private static int VERSION = 2;
+    private static int VERSION = 1;
 
     static
     {

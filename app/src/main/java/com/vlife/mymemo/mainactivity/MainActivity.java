@@ -30,18 +30,18 @@ public class MainActivity extends Activity {
     public ListView listView;
     public int number;
     public Button numberButton;
-    public Button topButton;
+    public Button memoAddButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         this.numberButton = ((Button) findViewById(R.id.number_button));
-        this.topButton = ((Button) findViewById(R.id.memo_add_button));
+        this.memoAddButton = ((Button) findViewById(R.id.memo_add_button));
         this.listView = ((ListView) findViewById(R.id.memo_list_show));
         this.listView.setDivider(null);
         this.listView.setOnItemClickListener(new ItemClick());
-        this.topButton.setOnClickListener(new View.OnClickListener() {
+        this.memoAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,
@@ -111,13 +111,6 @@ public class MainActivity extends Activity {
             bundle.putString("dateItem", (String)localMap.get("dateItem"));
             bundle.putString("idItem", (String)localMap.get("idItem"));
             bundle.putInt("backgroundItem",(Integer)localMap.get("backgroundItem"));
-            /*if (((Boolean) localMap.get("EXPANDED")).booleanValue()) {
-
-                localMap.put("EXPANDED", Boolean.valueOf(false));
-            } else {
-                localMap.put("EXPANDED", Boolean.valueOf(true));
-            }
-            MainActivity.this.adapter.notifyDataSetChanged();*/
 
             Intent intent=new Intent(MainActivity.this,EditActivity.class);
             intent.putExtras(bundle);

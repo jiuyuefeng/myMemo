@@ -28,13 +28,13 @@ public class EditActivity extends BaseActivity {
     private Date dateNow;
     private EditText editText;
     private String id=null;
-    private Button sureButton;
+    private Button saveButton;
     private Button yellowButton;//黄色背景
     private Button blueButton;//蓝色背景
     private Button whiteButton;//白色背景
     private Button greenButton;//绿色背景
     private Button redButton;//红色背景
-    private Integer bg_id=0;//保存背景图片的ID
+    private Integer bgId=0;//保存背景图片的ID
     private TextView textView;
 
     @Override
@@ -44,7 +44,7 @@ public class EditActivity extends BaseActivity {
         this.textView = ((TextView) findViewById(R.id.date_edit));//日期栏
         this.editText = ((DrawLine) findViewById(R.id.content_edit));//文本栏
         this.cancelButton = ((Button) findViewById(R.id.text_cancel_button));
-        this.sureButton = ((Button) findViewById(R.id.text_save_button));
+        this.saveButton = ((Button) findViewById(R.id.text_save_button));
 
         this.yellowButton= ((Button)findViewById(R.id.yellow_button));
         this.blueButton= ((Button)findViewById(R.id.blue_button));
@@ -66,7 +66,7 @@ public class EditActivity extends BaseActivity {
             this.date = getIntent().getStringExtra("dateItem");
             this.content = getIntent().getStringExtra("contentItem");
             //this.id = getIntent().getStringExtra("idItem");
-            this.bg_id = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
+            this.bgId = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
 
             //System.out.println("-----idItem-----id=" + id);
             this.editText.setSelection(this.editText.length());
@@ -78,23 +78,23 @@ public class EditActivity extends BaseActivity {
         }
 
         //显示编辑前的背景
-        if(bg_id==1) {
+        if(bgId==1) {
             editText.setBackgroundResource(R.drawable.bg_yellow);
             textView.setBackgroundResource(R.drawable.bg_yellowtop);
         }
-        if(bg_id==2) {
+        if(bgId==2) {
             editText.setBackgroundResource(R.drawable.bg_blue);
             textView.setBackgroundResource(R.drawable.bg_bluetop);
         }
-        if(bg_id==3) {
+        if(bgId==3) {
             editText.setBackgroundResource(R.drawable.bg_white);
             textView.setBackgroundResource(R.drawable.bg_whitetop);
         }
-        if(bg_id==4) {
+        if(bgId==4) {
             editText.setBackgroundResource(R.drawable.bg_green);
             textView.setBackgroundResource(R.drawable.bg_greentop);
         }
-        if(bg_id==5) {
+        if(bgId==5) {
             editText.setBackgroundResource(R.drawable.bg_red);
             textView.setBackgroundResource(R.drawable.bg_redtop);
         }
@@ -107,7 +107,7 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 textView.setBackgroundResource(R.drawable.bg_yellowtop);
                 editText.setBackgroundResource(R.drawable.bg_yellow);
-                bg_id=1;
+                bgId=1;
             }
         });
 
@@ -116,7 +116,7 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 textView.setBackgroundResource(R.drawable.bg_bluetop);
                 editText.setBackgroundResource(R.drawable.bg_blue);
-                bg_id=2;
+                bgId=2;
             }
         });
 
@@ -125,7 +125,7 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 textView.setBackgroundResource(R.drawable.bg_whitetop);
                 editText.setBackgroundResource(R.drawable.bg_white);
-                bg_id=3;
+                bgId=3;
             }
         });
 
@@ -134,7 +134,7 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 textView.setBackgroundResource(R.drawable.bg_greentop);
                 editText.setBackgroundResource(R.drawable.bg_green);
-                bg_id=4;
+                bgId=4;
             }
         });
 
@@ -143,13 +143,13 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 textView.setBackgroundResource(R.drawable.bg_redtop);
                 editText.setBackgroundResource(R.drawable.bg_red);
-                bg_id=5;
+                bgId=5;
             }
         });
 
 
         //确定按钮
-        this.sureButton.setOnClickListener(new View.OnClickListener() {
+        this.saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -173,7 +173,7 @@ public class EditActivity extends BaseActivity {
                 localNotepad.setTitle(strTitle);
                 localNotepad.setData(date);
                 localNotepad.setId(id);
-                localNotepad.setBackground(bg_id);
+                localNotepad.setBackground(bgId);
                 System.out.println("-----id-----id=" + id);
                 if(id==null){
                     localChangeSqlite.add(localSqLiteDatabase, localNotepad);

@@ -32,7 +32,7 @@ public class NotepadAdapter extends BaseAdapter {
     public Context context;
     public LayoutInflater inflater;
     public ArrayList<Map<String, Object>> list;
-    public Integer bg_id=0;
+    public Integer bgId=0;
 
     public NotepadAdapter(Activity activity, ArrayList<Map<String, Object>> list) {
 
@@ -65,89 +65,89 @@ public class NotepadAdapter extends BaseAdapter {
         if (!boo) {
             arg1 = inflater.inflate(R.layout.types_show, arg2, false);
 
-            setShow.contentView = (TextView) arg1
+            setShow.contentTypesShow = (TextView) arg1
                     .findViewById(R.id.content_types_show);
-            setShow.dateView = (TextView) arg1.findViewById(R.id.date_types_show);
+            setShow.dateTypesShow = (TextView) arg1.findViewById(R.id.date_types_show);
 
             String str = (String) list.get(arg0).get("titleItem");
             String dateStr = (String) list.get(arg0).get("dateItem");
-            bg_id= (Integer) list.get(arg0).get("backgroundItem");
+            bgId= (Integer) list.get(arg0).get("backgroundItem");
 
 
             //设置背景
-            if(bg_id==1) {
-                setShow.contentView.setBackgroundResource(R.drawable.bg_yellow);
-                setShow.dateView.setBackgroundResource(R.drawable.bg_yellowtop);
+            if(bgId==1) {
+                setShow.contentTypesShow.setBackgroundResource(R.drawable.bg_yellow);
+                setShow.dateTypesShow.setBackgroundResource(R.drawable.bg_yellowtop);
             }
-            if(bg_id==2) {
-                setShow.contentView.setBackgroundResource(R.drawable.bg_blue);
-                setShow.dateView.setBackgroundResource(R.drawable.bg_bluetop);
+            if(bgId==2) {
+                setShow.contentTypesShow.setBackgroundResource(R.drawable.bg_blue);
+                setShow.dateTypesShow.setBackgroundResource(R.drawable.bg_bluetop);
             }
-            if(bg_id==3) {
-                setShow.contentView.setBackgroundResource(R.drawable.bg_white);
-                setShow.dateView.setBackgroundResource(R.drawable.bg_whitetop);
+            if(bgId==3) {
+                setShow.contentTypesShow.setBackgroundResource(R.drawable.bg_white);
+                setShow.dateTypesShow.setBackgroundResource(R.drawable.bg_whitetop);
             }
-            if(bg_id==4) {
-                setShow.contentView.setBackgroundResource(R.drawable.bg_green);
-                setShow.dateView.setBackgroundResource(R.drawable.bg_greentop);
+            if(bgId==4) {
+                setShow.contentTypesShow.setBackgroundResource(R.drawable.bg_green);
+                setShow.dateTypesShow.setBackgroundResource(R.drawable.bg_greentop);
             }
-            if(bg_id==5) {
-                setShow.contentView.setBackgroundResource(R.drawable.bg_red);
-                setShow.dateView.setBackgroundResource(R.drawable.bg_redtop);
+            if(bgId==5) {
+                setShow.contentTypesShow.setBackgroundResource(R.drawable.bg_red);
+                setShow.dateTypesShow.setBackgroundResource(R.drawable.bg_redtop);
             }
 
-            setShow.contentView.setText("   " + str);
-            setShow.dateView.setText(dateStr);
-            setShow.showButtonWrite = (Button) arg1
+            setShow.contentTypesShow.setText("   " + str);
+            setShow.dateTypesShow.setText(dateStr);
+            setShow.typesEditButton = (Button) arg1
                     .findViewById(R.id.types_edit_button);
-            setShow.showButtonDelete = (Button) arg1
+            setShow.typesDeleteButton = (Button) arg1
                     .findViewById(R.id.types_delete_button);
-            setShow.showButtonWrite.setOnClickListener(new WriteButtonListener(
+            setShow.typesEditButton.setOnClickListener(new WriteButtonListener(
                     arg0));
-            setShow.showButtonDelete
+            setShow.typesDeleteButton
                     .setOnClickListener(new DeleteButtonListener(arg0));
         }
         else {
             arg1 = inflater.inflate(R.layout.style_show_listview, arg2, false);
-            setShow.cContentView = (TextViewLine) arg1
+            setShow.contentListShow = (TextViewLine) arg1
                     .findViewById(R.id.content_list_show);
-            setShow.cDateView = (TextView) arg1
+            setShow.dateListShow = (TextView) arg1
                     .findViewById(R.id.date_list_show);
             String str = (String) list.get(arg0).get("contentItem");
             String dateStr = (String) list.get(arg0).get("dateItem");
-            bg_id= (Integer) list.get(arg0).get("backgroundItem");
+            bgId= (Integer) list.get(arg0).get("backgroundItem");
 
             //设置背景
-            if(bg_id==1) {
-                setShow.cContentView.setBackgroundResource(R.drawable.bg_yellow);
-                setShow.cDateView.setBackgroundResource(R.drawable.bg_yellowtop);
+            if(bgId==1) {
+                setShow.contentListShow.setBackgroundResource(R.drawable.bg_yellow);
+                setShow.dateListShow.setBackgroundResource(R.drawable.bg_yellowtop);
             }
-            if(bg_id==2) {
-                setShow.cContentView.setBackgroundResource(R.drawable.bg_blue);
-                setShow.cDateView.setBackgroundResource(R.drawable.bg_bluetop);
+            if(bgId==2) {
+                setShow.contentListShow.setBackgroundResource(R.drawable.bg_blue);
+                setShow.dateListShow.setBackgroundResource(R.drawable.bg_bluetop);
             }
-            if(bg_id==3) {
-                setShow.cContentView.setBackgroundResource(R.drawable.bg_white);
-                setShow.cDateView.setBackgroundResource(R.drawable.bg_whitetop);
+            if(bgId==3) {
+                setShow.contentListShow.setBackgroundResource(R.drawable.bg_white);
+                setShow.dateListShow.setBackgroundResource(R.drawable.bg_whitetop);
             }
-            if(bg_id==4) {
-                setShow.cContentView.setBackgroundResource(R.drawable.bg_green);
-                setShow.cDateView.setBackgroundResource(R.drawable.bg_greentop);
+            if(bgId==4) {
+                setShow.contentListShow.setBackgroundResource(R.drawable.bg_green);
+                setShow.dateListShow.setBackgroundResource(R.drawable.bg_greentop);
             }
-            if(bg_id==5) {
-                setShow.cContentView.setBackgroundResource(R.drawable.bg_red);
-                setShow.cDateView.setBackgroundResource(R.drawable.bg_redtop);
+            if(bgId==5) {
+                setShow.contentListShow.setBackgroundResource(R.drawable.bg_red);
+                setShow.dateListShow.setBackgroundResource(R.drawable.bg_redtop);
             }
 
-            setShow.cContentView.setText("" + str);
-            setShow.cDateView.setText(dateStr);
-            setShow.styleButtonWrite = (Button) arg1
+            setShow.contentListShow.setText("" + str);
+            setShow.dateListShow.setText(dateStr);
+            setShow.contentEditButton = (Button) arg1
                     .findViewById(R.id.content_edit_button);
-            setShow.styleButtonWrite
+            setShow.contentEditButton
                     .setOnClickListener(new WriteButtonListener(arg0));
-            setShow.styleButtonDelete = (Button) arg1
+            setShow.contentDeleteButton = (Button) arg1
                     .findViewById(R.id.content_delete_button);
-            setShow.styleButtonDelete
+            setShow.contentDeleteButton
                     .setOnClickListener(new DeleteButtonListener(arg0));
         }
         return arg1;
@@ -232,14 +232,14 @@ public class NotepadAdapter extends BaseAdapter {
     }
 
     class SetShow {
-        public TextView contentView;
-        public TextView dateView;
-        public TextViewLine cContentView;
-        public TextView cDateView;
-        public Button styleButtonWrite;
-        public Button styleButtonDelete;
-        public Button showButtonWrite;
-        public Button showButtonDelete;
+        public TextView contentTypesShow;
+        public TextView dateTypesShow;
+        public TextViewLine contentListShow;
+        public TextView dateListShow;
+        public Button contentEditButton;
+        public Button contentDeleteButton;
+        public Button typesEditButton;
+        public Button typesDeleteButton;
 
     }
 
