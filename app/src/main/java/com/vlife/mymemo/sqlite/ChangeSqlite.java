@@ -17,7 +17,7 @@ public class ChangeSqlite {
     public long add(SQLiteDatabase paramSQLiteDatabase, Notepad paramNotepad) {
         ContentValues localContentValues = new ContentValues();
         localContentValues.put("title", paramNotepad.getTitle());
-        localContentValues.put("date", paramNotepad.getData());
+        localContentValues.put("date", paramNotepad.getDate());
         localContentValues.put("content", paramNotepad.getContent());
         localContentValues.put("background",paramNotepad.getBackground());
         long l = paramSQLiteDatabase.insert(table, null, localContentValues);
@@ -47,7 +47,7 @@ public class ChangeSqlite {
                     .getColumnIndex("title")));
             localNotepad.setContent(localCursor.getString(localCursor
                     .getColumnIndex("content")));
-            localNotepad.setData(localCursor.getString(localCursor
+            localNotepad.setDate(localCursor.getString(localCursor
                     .getColumnIndex("date")));
             localNotepad.setBackground(localCursor.getInt(localCursor
                     .getColumnIndex("background")));
@@ -62,7 +62,7 @@ public class ChangeSqlite {
         ContentValues localContentValues = new ContentValues();
         localContentValues.put("title", paramNotepad.getTitle());
         localContentValues.put("content", paramNotepad.getContent());
-        localContentValues.put("date", paramNotepad.getData());
+        localContentValues.put("date", paramNotepad.getDate());
         localContentValues.put("background",paramNotepad.getBackground());
         paramSQLiteDatabase.update(table, localContentValues, "id="
                 + paramNotepad.getId(), null);

@@ -71,6 +71,7 @@ public class NotepadAdapter extends BaseAdapter {
 
             String str = (String) list.get(arg0).get("titleItem");
             String dateStr = (String) list.get(arg0).get("dateItem");
+
             bgId= (Integer) list.get(arg0).get("backgroundItem");
 
 
@@ -115,6 +116,7 @@ public class NotepadAdapter extends BaseAdapter {
                     .findViewById(R.id.date_list_show);
             String str = (String) list.get(arg0).get("contentItem");
             String dateStr = (String) list.get(arg0).get("dateItem");
+
             bgId= (Integer) list.get(arg0).get("backgroundItem");
 
             //设置背景

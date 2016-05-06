@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
             Notepad localNotepad = localIterator.next();
             HashMap<String, Object> localHashMap = new HashMap<>();
             localHashMap.put("titleItem", localNotepad.getTitle());
-            localHashMap.put("dateItem", localNotepad.getData());
+            localHashMap.put("dateItem", localNotepad.getDate());
             localHashMap.put("contentItem", localNotepad.getContent());
             localHashMap.put("idItem", localNotepad.getId());
             localHashMap.put("backgroundItem",localNotepad.getBackground());

@@ -1,15 +1,18 @@
 package com.vlife.mymemo.adapter;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/4/27 0027.
  */
-public class Notepad {
+public class Notepad implements Serializable{
 
     public String content;
-    public String data;
+    public String date;
     public String id;
     public String title;
     public Integer background;
+    //public String alarm;
 
     public String getContent() {
         return this.content;
@@ -19,13 +22,15 @@ public class Notepad {
         return this.title;
     }
 
-    public String getData() {
-        return this.data;
+    public String getDate() {
+        return this.date;
     }
 
     public String getId() {return this.id;}
 
     public Integer getBackground() {return this.background;}
+
+    //public String getAlarm() {return this.alarm;}
 
     public void setContent(String paramString) {
         this.content = paramString;
@@ -35,12 +40,12 @@ public class Notepad {
         this.title = paramString;
     }
 
-    public void setData(String paramString) {
-        this.data = paramString;
-    }
+    public void setDate(String paramString) {this.date = paramString;}
 
     public void setId(String paramString) {this.id = paramString;}
 
     public void setBackground(Integer integer) {this.background = integer;}
+
+    //public void setAlarm(String paramString) {this.alarm = paramString;}
 
 }

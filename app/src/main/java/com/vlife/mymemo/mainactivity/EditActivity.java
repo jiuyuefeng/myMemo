@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +46,8 @@ public class EditActivity extends BaseActivity {
     private TextView textView;
     private Button alarmButton;//闹钟设置按钮
     private AlarmManager alarmManager;
+    private Notepad notepad=null;//传出数据
+    private Notepad notepadReturn=null;
 
     @Override
     protected void onCreate(Bundle paramBundle) {
@@ -63,29 +66,58 @@ public class EditActivity extends BaseActivity {
         this.greenButton= ((Button)findViewById(R.id.green_button));
         this.redButton= ((Button)findViewById(R.id.red_button));
 
+        this.notepad=new Notepad();
+        this.notepadReturn=new Notepad();
 
-        this.id = getIntent().getStringExtra("idItem");
-        //String edittext=editText.getText().toString();
-        //编辑新建页
-        if(id==null){
-            this.dateNow=new Date();
-            this.date=this.dateNow.getDate();
-            this.textView.setText(this.date);
-        }
-        //编辑已有页
-        else{
-            this.date = getIntent().getStringExtra("dateItem");
-            this.content = getIntent().getStringExtra("contentItem");
-            //this.id = getIntent().getStringExtra("idItem");
-            this.bgId = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
+        this.notepadReturn=(Notepad) getIntent().getSerializableExtra("Alarm");
+        //闹钟响应
+        if(this.notepadReturn!=null){
+            Log.d("note",""+notepadReturn.id);
+            this.date=notepadReturn.getDate();
+            this.content=notepadReturn.getContent();
+            this.bgId=notepadReturn.getBackground();
 
-            //System.out.println("-----idItem-----id=" + id);
             this.editText.setSelection(this.editText.length());
             this.editText.setText(this.content);
             this.textView.setText(this.date);
             this.dateNow = new Date();
             this.date = this.dateNow.getDate();
             this.textView.setText(this.date);
+        }
+
+        //一般显示（非闹钟响应）
+        else {
+            this.id = getIntent().getStringExtra("idItem");
+            this.notepad.id = this.id;
+            //String edittext=editText.getText().toString();
+            //编辑新建页
+            if (id == null) {
+                this.dateNow = new Date();
+                this.date = this.dateNow.getDate();
+                this.textView.setText(this.date);
+                this.notepad.date = this.date;
+            }
+            //编辑已有页
+            if (id != null) {
+                this.date = getIntent().getStringExtra("dateItem");
+                //Notepad notepad=(Notepad) getIntent().getSerializableExtra("Alarm");
+                this.content = getIntent().getStringExtra("contentItem");
+                //this.id = getIntent().getStringExtra("idItem");
+                this.bgId = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
+
+                //System.out.println("-----idItem-----id=" + id);
+                this.editText.setSelection(this.editText.length());
+                this.editText.setText(this.content);
+                this.textView.setText(this.date);
+                this.dateNow = new Date();
+                this.date = this.dateNow.getDate();
+                this.textView.setText(this.date);
+
+                //设置闹钟要传递的数据
+                this.notepad.date = this.date;
+                this.notepad.content = this.content;
+                this.notepad.background = bgId;
+            }
         }
 
         //显示编辑前的背景
@@ -172,9 +204,12 @@ public class EditActivity extends BaseActivity {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                                 //指定启动EditActivity组件
-                                Intent intent = new Intent(EditActivity.this, EditActivity.class);
+                                Intent intent = new Intent(EditActivity.this,EditActivity.class);
+                                intent.putExtra("Alarm",notepad);
+                                //intent.putExtra("alarmIdItem",id);
                                 // 创建PendingIntent对象
-                                PendingIntent pi = PendingIntent.getActivity(EditActivity.this, 0, intent, 0);
+                                Log.d("my",""+notepad.id);
+                                PendingIntent pi = PendingIntent.getActivity(EditActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 Calendar c = Calendar.getInstance();
                                 c.setTimeInMillis(System.currentTimeMillis());
                                 //根据用户选择时间来设置Calendar对象
@@ -184,6 +219,7 @@ public class EditActivity extends BaseActivity {
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
                                 //显示闹钟设置成功的提示信息
                                 Toast.makeText(EditActivity.this, "闹钟设置成功", Toast.LENGTH_SHORT).show();
+                                Log.d("my"," "+c);
                             }
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
             }
@@ -212,7 +248,7 @@ public class EditActivity extends BaseActivity {
                         + strContent.substring(0, 11) : strContent;
                 localNotepad.setContent(strContent);
                 localNotepad.setTitle(strTitle);
-                localNotepad.setData(date);
+                localNotepad.setDate(date);
                 localNotepad.setId(id);
                 localNotepad.setBackground(bgId);
                 System.out.println("-----id-----id=" + id);
@@ -234,4 +270,5 @@ public class EditActivity extends BaseActivity {
         });
 
     }
+
 }
