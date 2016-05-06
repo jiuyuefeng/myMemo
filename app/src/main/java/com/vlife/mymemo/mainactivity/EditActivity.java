@@ -1,20 +1,27 @@
 package com.vlife.mymemo.mainactivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.administrator.mymemo.R;
-import com.vlife.mymemo.sqlite.ChangeSqlite;
-import com.vlife.mymemo.date.Date;
-import com.vlife.mymemo.ui.DrawLine;
 import com.vlife.mymemo.adapter.Notepad;
+import com.vlife.mymemo.date.Date;
+import com.vlife.mymemo.sqlite.ChangeSqlite;
 import com.vlife.mymemo.sqlite.SqliteHelper;
+import com.vlife.mymemo.ui.DrawLine;
+
+import java.util.Calendar;
 
 /**
  * Created by Administrator on 2016/4/27 0027.
@@ -36,6 +43,8 @@ public class EditActivity extends BaseActivity {
     private Button redButton;//红色背景
     private Integer bgId=0;//保存背景图片的ID
     private TextView textView;
+    private Button alarmButton;//闹钟设置按钮
+    private AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle paramBundle) {
@@ -45,6 +54,8 @@ public class EditActivity extends BaseActivity {
         this.editText = ((DrawLine) findViewById(R.id.content_edit));//文本栏
         this.cancelButton = ((Button) findViewById(R.id.text_cancel_button));
         this.saveButton = ((Button) findViewById(R.id.text_save_button));
+
+        this.alarmButton=(Button) findViewById(R.id.alarm_button);//闹钟按钮
 
         this.yellowButton= ((Button)findViewById(R.id.yellow_button));
         this.blueButton= ((Button)findViewById(R.id.blue_button));
@@ -147,6 +158,36 @@ public class EditActivity extends BaseActivity {
             }
         });
 
+        this.alarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar currentTime = Calendar.getInstance();
+
+                //获取AlarmManager对象
+                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+                //创建一个TimePickerDialog实例，并把它显示出来
+                new TimePickerDialog(EditActivity.this, 0,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                                //指定启动EditActivity组件
+                                Intent intent = new Intent(EditActivity.this, EditActivity.class);
+                                // 创建PendingIntent对象
+                                PendingIntent pi = PendingIntent.getActivity(EditActivity.this, 0, intent, 0);
+                                Calendar c = Calendar.getInstance();
+                                c.setTimeInMillis(System.currentTimeMillis());
+                                //根据用户选择时间来设置Calendar对象
+                                c.set(Calendar.HOUR, hour);
+                                c.set(Calendar.MINUTE, minute);
+                                //设置AlarmManager将在Calendar对应时间启动指定组件
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+                                //显示闹钟设置成功的提示信息
+                                Toast.makeText(EditActivity.this, "闹钟设置成功", Toast.LENGTH_SHORT).show();
+                            }
+                        }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
+            }
+        });
 
         //确定按钮
         this.saveButton.setOnClickListener(new View.OnClickListener() {
@@ -191,5 +232,6 @@ public class EditActivity extends BaseActivity {
                 finish();
             }
         });
+
     }
 }
