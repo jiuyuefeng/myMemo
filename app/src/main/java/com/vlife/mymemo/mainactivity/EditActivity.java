@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
+import com.vlife.mymemo.alarm.AlarmReceiver;
 import com.vlife.mymemo.date.Date;
 import com.vlife.mymemo.sqlite.ChangeSqlite;
 import com.vlife.mymemo.sqlite.SqliteHelper;
@@ -67,26 +68,10 @@ public class EditActivity extends BaseActivity {
         this.redButton= ((Button)findViewById(R.id.red_button));
 
         this.notepad=new Notepad();
-        this.notepadReturn=new Notepad();
 
-        this.notepadReturn=(Notepad) getIntent().getSerializableExtra("Alarm");
-        //闹钟响应
-        if(this.notepadReturn!=null){
-            Log.d("note",""+notepadReturn.id);
-            this.date=notepadReturn.getDate();
-            this.content=notepadReturn.getContent();
-            this.bgId=notepadReturn.getBackground();
 
-            this.editText.setSelection(this.editText.length());
-            this.editText.setText(this.content);
-            this.textView.setText(this.date);
-            this.dateNow = new Date();
-            this.date = this.dateNow.getDate();
-            this.textView.setText(this.date);
-        }
 
         //一般显示（非闹钟响应）
-        else {
             this.id = getIntent().getStringExtra("idItem");
             this.notepad.id = this.id;
             //String edittext=editText.getText().toString();
@@ -96,6 +81,7 @@ public class EditActivity extends BaseActivity {
                 this.date = this.dateNow.getDate();
                 this.textView.setText(this.date);
                 this.notepad.date = this.date;
+                this.notepad.background=bgId;
             }
             //编辑已有页
             if (id != null) {
@@ -118,7 +104,6 @@ public class EditActivity extends BaseActivity {
                 this.notepad.content = this.content;
                 this.notepad.background = bgId;
             }
-        }
 
         //显示编辑前的背景
         if(bgId==1) {
@@ -199,29 +184,30 @@ public class EditActivity extends BaseActivity {
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
                 //创建一个TimePickerDialog实例，并把它显示出来
-                new TimePickerDialog(EditActivity.this, 0,
-                        new TimePickerDialog.OnTimeSetListener() {
+                new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                                 //指定启动EditActivity组件
-                                Intent intent = new Intent(EditActivity.this,EditActivity.class);
+
+                                Intent intent = new Intent(EditActivity.this,AlarmReceiver.class);
                                 intent.putExtra("Alarm",notepad);
-                                //intent.putExtra("alarmIdItem",id);
+                                intent.setAction("MyBroadcast");
                                 // 创建PendingIntent对象
-                                Log.d("my",""+notepad.id);
-                                PendingIntent pi = PendingIntent.getActivity(EditActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                                 Calendar c = Calendar.getInstance();
                                 c.setTimeInMillis(System.currentTimeMillis());
                                 //根据用户选择时间来设置Calendar对象
                                 c.set(Calendar.HOUR, hour);
                                 c.set(Calendar.MINUTE, minute);
+//                               // c.set(Calendar.MONTH,c.get(Calendar.MONTH)+1);
                                 //设置AlarmManager将在Calendar对应时间启动指定组件
+
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
                                 //显示闹钟设置成功的提示信息
                                 Toast.makeText(EditActivity.this, "闹钟设置成功", Toast.LENGTH_SHORT).show();
                                 Log.d("my"," "+c);
                             }
-                        }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
+                        }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
             }
         });
 
