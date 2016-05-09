@@ -49,6 +49,7 @@ public class EditActivity extends BaseActivity {
     private AlarmManager alarmManager;
     private Notepad notepad=null;//传出数据
     private Notepad notepadReturn=null;
+    private Boolean mIsSave=false;//判断当前是否已经保存
 
     @Override
     protected void onCreate(Bundle paramBundle) {
@@ -69,41 +70,56 @@ public class EditActivity extends BaseActivity {
 
         this.notepad=new Notepad();
 
+        //this.id = getIntent().getStringExtra("idItem");
 
-
-        //一般显示（非闹钟响应）
+        //响应闹钟
+        this.notepadReturn=(Notepad) getIntent().getSerializableExtra("returnAlarm");
+        Log.d("my","notepadreturn"+notepadReturn);
+        if(this.notepadReturn!=null){
+            this.dateNow = new Date();
+            this.date = this.dateNow.getDate();
+            this.content=notepadReturn.getContent();
+            this.bgId=notepadReturn.getBackground();
+            this.id=notepadReturn.getId();
+        }
+        //非闹钟响应情况
+        else {
+            this.date = getIntent().getStringExtra("dateItem");
+            //Notepad notepad=(Notepad) getIntent().getSerializableExtra("Alarm");
+            this.content = getIntent().getStringExtra("contentItem");
+            //this.id = getIntent().getStringExtra("idItem");
+            this.bgId = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
             this.id = getIntent().getStringExtra("idItem");
+        }
+        //编辑新建页
+        if (id == null) {
+            this.dateNow = new Date();
+            this.date = this.dateNow.getDate();
+            this.content= editText.getText().toString();
+
+            this.editText.setSelection(this.editText.length());
+            this.editText.setText(this.content);
+            this.textView.setText(this.date);
+
+            //设置闹钟要传递的数据
+            this.notepad.content = this.content;
+            this.notepad.date = this.date;
+        }
+        //编辑已有页
+        else {
+            //System.out.println("-----idItem-----id=" + id);
+            this.editText.setSelection(this.editText.length());
+            this.editText.setText(this.content);
+            this.textView.setText(this.date);
+            this.dateNow = new Date();
+            this.date = this.dateNow.getDate();
+            this.textView.setText(this.date);
+
+            //设置闹钟要传递的数据
+            this.notepad.content = this.content;
+            this.notepad.date = this.date;
             this.notepad.id = this.id;
-            //String edittext=editText.getText().toString();
-            //编辑新建页
-            if (id == null) {
-                this.dateNow = new Date();
-                this.date = this.dateNow.getDate();
-                this.textView.setText(this.date);
-                this.notepad.date = this.date;
-                this.notepad.background=bgId;
-            }
-            //编辑已有页
-            if (id != null) {
-                this.date = getIntent().getStringExtra("dateItem");
-                //Notepad notepad=(Notepad) getIntent().getSerializableExtra("Alarm");
-                this.content = getIntent().getStringExtra("contentItem");
-                //this.id = getIntent().getStringExtra("idItem");
-                this.bgId = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
-
-                //System.out.println("-----idItem-----id=" + id);
-                this.editText.setSelection(this.editText.length());
-                this.editText.setText(this.content);
-                this.textView.setText(this.date);
-                this.dateNow = new Date();
-                this.date = this.dateNow.getDate();
-                this.textView.setText(this.date);
-
-                //设置闹钟要传递的数据
-                this.notepad.date = this.date;
-                this.notepad.content = this.content;
-                this.notepad.background = bgId;
-            }
+        }
 
         //显示编辑前的背景
         if(bgId==1) {
@@ -126,8 +142,6 @@ public class EditActivity extends BaseActivity {
             editText.setBackgroundResource(R.drawable.bg_red);
             textView.setBackgroundResource(R.drawable.bg_redtop);
         }
-
-
 
         //设置背景
         this.yellowButton.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +189,8 @@ public class EditActivity extends BaseActivity {
             }
         });
 
+        this.notepad.background=bgId;
+
         this.alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,16 +198,23 @@ public class EditActivity extends BaseActivity {
 
                 //获取AlarmManager对象
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
                 //创建一个TimePickerDialog实例，并把它显示出来
                 new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                                 //指定启动EditActivity组件
-
                                 Intent intent = new Intent(EditActivity.this,AlarmReceiver.class);
-                                intent.putExtra("Alarm",notepad);
                                 intent.setAction("MyBroadcast");
+                                //设置要传递的数据
+                                if(!mIsSave){//判断是否已经保存
+                                    saveEdit();
+                                    mIsSave=true;
+                                }
+                                Log.d("my","mIsSave"+mIsSave);
+                                notepad.id=id;
+                                Log.d("my","id"+notepad.background);
+                                intent.putExtra("Alarm",notepad);
+
                                 // 创建PendingIntent对象
                                 PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                                 Calendar c = Calendar.getInstance();
@@ -199,13 +222,12 @@ public class EditActivity extends BaseActivity {
                                 //根据用户选择时间来设置Calendar对象
                                 c.set(Calendar.HOUR, hour);
                                 c.set(Calendar.MINUTE, minute);
-//                               // c.set(Calendar.MONTH,c.get(Calendar.MONTH)+1);
+                                // c.set(Calendar.MONTH,c.get(Calendar.MONTH)+1);
                                 //设置AlarmManager将在Calendar对应时间启动指定组件
-
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
                                 //显示闹钟设置成功的提示信息
                                 Toast.makeText(EditActivity.this, "闹钟设置成功", Toast.LENGTH_SHORT).show();
-                                Log.d("my"," "+c);
+                                Log.d("my","shijian"+c);
                             }
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
             }
@@ -218,31 +240,9 @@ public class EditActivity extends BaseActivity {
             public void onClick(View v) {
                 //editText.setBackground(R.drawable.shape_);
                 //editText.setBackgroundResource(R.drawable.green);
-                SQLiteDatabase localSqLiteDatabase = new SqliteHelper(
-                        EditActivity.this.context, null, null, 0)
-                        .getWritableDatabase();
-                Notepad localNotepad = new Notepad();
-                ChangeSqlite localChangeSqlite = new ChangeSqlite();
-                String strContent = EditActivity.this.editText.getText()
-                        .toString();
-                if (strContent.equals("")) {
-                    Toast.makeText(EditActivity.this.context, "请输入内容",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String strTitle = strContent.length() > 11 ? " "
-                        + strContent.substring(0, 11) : strContent;
-                localNotepad.setContent(strContent);
-                localNotepad.setTitle(strTitle);
-                localNotepad.setDate(date);
-                localNotepad.setId(id);
-                localNotepad.setBackground(bgId);
-                System.out.println("-----id-----id=" + id);
-                if(id==null){
-                    localChangeSqlite.add(localSqLiteDatabase, localNotepad);
-                }
-                else{
-                localChangeSqlite.update(localSqLiteDatabase, localNotepad);
+                if(!mIsSave){
+                    saveEdit();
+                    mIsSave=true;
                 }
                 finish();
             }
@@ -255,6 +255,37 @@ public class EditActivity extends BaseActivity {
             }
         });
 
+    }
+
+    //保存内容
+    public void saveEdit(){
+        SQLiteDatabase localSqLiteDatabase = new SqliteHelper(
+                EditActivity.this.context, null, null, 0)
+                .getWritableDatabase();
+        Notepad localNotepad = new Notepad();
+        ChangeSqlite localChangeSqlite = new ChangeSqlite();
+        String strContent = EditActivity.this.editText.getText()
+                .toString();
+        if (strContent.equals("")) {
+            Toast.makeText(EditActivity.this.context, "请输入内容",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String strTitle = strContent.length() > 11 ? " "
+                + strContent.substring(0, 11) : strContent;
+        localNotepad.setContent(strContent);
+        localNotepad.setTitle(strTitle);
+        localNotepad.setDate(date);
+        localNotepad.setId(id);
+        localNotepad.setBackground(bgId);
+        if(id==null){
+            localChangeSqlite.add(localSqLiteDatabase, localNotepad);
+            id=localNotepad.id;
+        }
+        else{
+            localChangeSqlite.update(localSqLiteDatabase, localNotepad);
+            id=localNotepad.id;
+        }
     }
 
 }
