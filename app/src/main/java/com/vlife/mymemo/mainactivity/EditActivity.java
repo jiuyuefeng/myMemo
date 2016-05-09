@@ -54,6 +54,7 @@ public class EditActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
+        mIsSave=false;
         setContentView(R.layout.edit_show);
         this.textView = ((TextView) findViewById(R.id.date_edit));//日期栏
         this.editText = ((DrawLine) findViewById(R.id.content_edit));//文本栏
@@ -81,8 +82,14 @@ public class EditActivity extends BaseActivity {
             this.content=notepadReturn.getContent();
             this.bgId=notepadReturn.getBackground();
             this.id=notepadReturn.getId();
+
+            //显示详情
+            this.editText.setSelection(this.editText.length());
+            this.editText.setText(this.content);
+            this.textView.setText(this.date);
+
         }
-        //非闹钟响应情况
+        //非闹钟响应情况的
         else {
             this.date = getIntent().getStringExtra("dateItem");
             //Notepad notepad=(Notepad) getIntent().getSerializableExtra("Alarm");
@@ -95,15 +102,17 @@ public class EditActivity extends BaseActivity {
         if (id == null) {
             this.dateNow = new Date();
             this.date = this.dateNow.getDate();
-            this.content= editText.getText().toString();
+            //this.content= editText.getText().toString();
+            String strContent=editText.getText().toString();
 
+            Log.d("my","content"+content);
             this.editText.setSelection(this.editText.length());
-            this.editText.setText(this.content);
+            this.editText.setText(strContent);
             this.textView.setText(this.date);
 
             //设置闹钟要传递的数据
-            this.notepad.content = this.content;
-            this.notepad.date = this.date;
+            //this.notepad.content = this.content;
+            //this.notepad.date = this.date;
         }
         //编辑已有页
         else {
@@ -115,10 +124,6 @@ public class EditActivity extends BaseActivity {
             this.date = this.dateNow.getDate();
             this.textView.setText(this.date);
 
-            //设置闹钟要传递的数据
-            this.notepad.content = this.content;
-            this.notepad.date = this.date;
-            this.notepad.id = this.id;
         }
 
         //显示编辑前的背景
@@ -189,7 +194,7 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-        this.notepad.background=bgId;
+        //this.notepad.background=bgId;
 
         this.alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,13 +210,16 @@ public class EditActivity extends BaseActivity {
                                 //指定启动EditActivity组件
                                 Intent intent = new Intent(EditActivity.this,AlarmReceiver.class);
                                 intent.setAction("MyBroadcast");
-                                //设置要传递的数据
+                                //设置闹钟要传递的数据
                                 if(!mIsSave){//判断是否已经保存
                                     saveEdit();
                                     mIsSave=true;
                                 }
                                 Log.d("my","mIsSave"+mIsSave);
                                 notepad.id=id;
+                                notepad.content = content;
+                                notepad.background=bgId;
+                                notepad.date = date;
                                 Log.d("my","id"+notepad.background);
                                 intent.putExtra("Alarm",notepad);
 
@@ -280,12 +288,15 @@ public class EditActivity extends BaseActivity {
         localNotepad.setBackground(bgId);
         if(id==null){
             localChangeSqlite.add(localSqLiteDatabase, localNotepad);
-            id=localNotepad.id;
         }
         else{
             localChangeSqlite.update(localSqLiteDatabase, localNotepad);
-            id=localNotepad.id;
+
         }
+        id=localNotepad.id;
+        content=strContent;
+        bgId=localNotepad.background;
+        date=localNotepad.date;
     }
 
 }
