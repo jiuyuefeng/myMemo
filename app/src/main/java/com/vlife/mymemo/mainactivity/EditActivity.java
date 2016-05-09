@@ -1,6 +1,7 @@
 package com.vlife.mymemo.mainactivity;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -199,17 +201,23 @@ public class EditActivity extends BaseActivity {
         this.alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar currentTime = Calendar.getInstance();
+                final Calendar currentTime = Calendar.getInstance();
 
-                //获取AlarmManager对象
-                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 //创建一个TimePickerDialog实例，并把它显示出来
+                new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener(){
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        currentTime.setTimeInMillis(System.currentTimeMillis());
+                        currentTime.set(Calendar.YEAR, year);
+                        currentTime.set(Calendar.MONTH, monthOfYear);
+                        currentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
                 new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                                 //指定启动EditActivity组件
-                                Intent intent = new Intent(EditActivity.this,AlarmReceiver.class);
-                                intent.setAction("MyBroadcast");
+                                Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
+                                intentReceiver.setAction("com.MyBroadcast.alarm");
                                 //设置闹钟要传递的数据
                                 if(!mIsSave){//判断是否已经保存
                                     saveEdit();
@@ -220,17 +228,20 @@ public class EditActivity extends BaseActivity {
                                 notepad.content = content;
                                 notepad.background=bgId;
                                 notepad.date = date;
-                                Log.d("my","id"+notepad.background);
-                                intent.putExtra("Alarm",notepad);
+                                //Log.d("my","id"+notepad.background);
+                                intentReceiver.putExtra("Alarm",notepad);
 
+                                //intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                 // 创建PendingIntent对象
-                                PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
                                 Calendar c = Calendar.getInstance();
                                 c.setTimeInMillis(System.currentTimeMillis());
                                 //根据用户选择时间来设置Calendar对象
-                                c.set(Calendar.HOUR, hour);
+                                c.set(Calendar.HOUR_OF_DAY, hour);
                                 c.set(Calendar.MINUTE, minute);
                                 // c.set(Calendar.MONTH,c.get(Calendar.MONTH)+1);
+                                //获取AlarmManager对象
+                                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                                 //设置AlarmManager将在Calendar对应时间启动指定组件
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
                                 //显示闹钟设置成功的提示信息
@@ -238,6 +249,8 @@ public class EditActivity extends BaseActivity {
                                 Log.d("my","shijian"+c);
                             }
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
+                    }
+                }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 

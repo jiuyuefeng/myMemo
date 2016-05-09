@@ -21,7 +21,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if("MyBroadcast".equals(intent.getAction())){
+        Log.d("my","receive");
+        if("com.MyBroadcast.alarm".equals(intent.getAction())){
             this.returnAlarm=(Notepad) intent.getSerializableExtra("Alarm");
             Log.d("my","receiver"+returnAlarm.getId());
             Intent alarmIntent=new Intent(context, EditActivity.class);
