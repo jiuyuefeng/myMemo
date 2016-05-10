@@ -13,7 +13,7 @@
     android:textColor="#000000"
     android:layout_marginTop="10dp"
     android:layout_centerHorizontal="true" />
-<com.vlife.mymemo.ui.DrawLine
+<com.vlife.mymemo.picture.MyEditText
     android:id="@+id/content_edit"
     android:layout_width="300dp"
     android:layout_height="100dp"
@@ -26,6 +26,8 @@
     android:layout_centerHorizontal="true"
     android:lineSpacingExtra="3dp"
     android:layout_above="@+id/color_select_bar" />
+
+
 
     <Button
         android:layout_width="130dp"

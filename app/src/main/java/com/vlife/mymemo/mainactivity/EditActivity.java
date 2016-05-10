@@ -1,13 +1,24 @@
 package com.vlife.mymemo.mainactivity;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,10 +32,11 @@ import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.alarm.AlarmReceiver;
 import com.vlife.mymemo.date.Date;
+import com.vlife.mymemo.picture.MyEditText;
 import com.vlife.mymemo.sqlite.ChangeSqlite;
 import com.vlife.mymemo.sqlite.SqliteHelper;
-import com.vlife.mymemo.ui.DrawLine;
 
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 /**
@@ -53,13 +65,18 @@ public class EditActivity extends BaseActivity {
     private Notepad notepadReturn=null;
     private Boolean mIsSave=false;//判断当前是否已经保存
 
+    private Button b;//导入照片按钮
+    private MyEditText e;//编辑图片框
+    private static final int PHOTO_SUCCESS = 2;
+    private static final int CAMERA_SUCCESS = 1;
+
     @Override
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
         mIsSave=false;
         setContentView(R.layout.edit_show);
         this.textView = ((TextView) findViewById(R.id.date_edit));//日期栏
-        this.editText = ((DrawLine) findViewById(R.id.content_edit));//文本栏
+        this.editText = ((MyEditText) findViewById(R.id.content_edit));//文本栏
         this.cancelButton = ((Button) findViewById(R.id.text_cancel_button));
         this.saveButton = ((Button) findViewById(R.id.text_save_button));
 
@@ -276,7 +293,126 @@ public class EditActivity extends BaseActivity {
             }
         });
 
+
+        //照片导入方式选择
+        b = (Button) findViewById(R.id.picture_button);
+        e = (MyEditText) findViewById(R.id.content_edit);
+        b.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final CharSequence[] items = { "手机相册", "相机拍摄" };
+                AlertDialog dlg = new AlertDialog.Builder(EditActivity.this).setTitle("选择图片").setItems(items,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int item) {
+                                //这里item是根据选择的方式
+                                //在item数组里定义了两种方式，拍照的小标为1（调用拍照）
+                                if(item==1){
+                                    Intent getImageByCamera= new Intent("android.media.action.IMAGE_CAPTURE");
+                                    startActivityForResult(getImageByCamera, CAMERA_SUCCESS);
+                                }else{
+                                    Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
+                                    getImage.addCategory(Intent.CATEGORY_OPENABLE);
+                                    getImage.setType("image/*");
+                                    startActivityForResult(getImage, PHOTO_SUCCESS);
+                                }
+                            }
+                        }).create();
+                dlg.show();
+                //e.insertDrawable(R.drawable.easy);
+            }
+        });
+
     }
+
+    //导入图片
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        ContentResolver resolver = getContentResolver();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PHOTO_SUCCESS:
+                    //获得图片的uri
+                    Uri originalUri = intent.getData();
+                    Bitmap bitmap = null;
+                    try {
+                        Bitmap originalBitmap = BitmapFactory.decodeStream(resolver.openInputStream(originalUri));
+                        bitmap = resizeImage(originalBitmap, 200, 200);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if(bitmap != null){
+                        //根据Bitmap对象创建ImageSpan对象
+                        ImageSpan imageSpan = new ImageSpan(EditActivity.this, bitmap);
+                        //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片
+                        SpannableString spannableString = new SpannableString("[local]"+1+"[/local]");
+                        //用ImageSpan对象替换face
+                        spannableString.setSpan(imageSpan, 0, "[local]1[local]".length()+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        //将选择的图片追加到EditText中光标所在的位置
+                        int index = e.getSelectionStart(); //获取光标所在位置
+                        Editable edit_text = e.getEditableText();
+                        if(index <0 || index >= edit_text.length()){
+                            edit_text.append(spannableString);
+                        }else{
+                            edit_text.insert(index, spannableString);
+                        }
+                    }else{
+                        Toast.makeText(EditActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case CAMERA_SUCCESS:
+                    Bundle extras = intent.getExtras();
+                    Bitmap originalBitmap1 = (Bitmap) extras.get("data");
+                    if(originalBitmap1 != null){
+                        bitmap = resizeImage(originalBitmap1, 200, 200);
+                        //根据Bitmap对象创建ImageSpan对象
+                        ImageSpan imageSpan = new ImageSpan(EditActivity.this, bitmap);
+                        //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片�
+                        SpannableString spannableString = new SpannableString("[local]"+1+"[/local]");
+                        //用ImageSpan对象替换face
+                        spannableString.setSpan(imageSpan, 0, "[local]1[local]".length()+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        //将选择的图片追加到EditText光标所在的位置
+                        int index = e.getSelectionStart(); //获取光标所在位置
+                        Editable edit_text = e.getEditableText();
+                        if(index <0 || index >= edit_text.length()){
+                            edit_text.append(spannableString);
+                        }else{
+                            edit_text.insert(index, spannableString);
+                        }
+                    }else{
+                        Toast.makeText(EditActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    /**
+     * 图片缩放
+     * @param originalBitmap 原始的Bitmap
+     * @param newWidth 自定义宽度
+     * @param newHeight 自定义高度
+     * @return 缩放后的Bitmap
+     */
+    private Bitmap resizeImage(Bitmap originalBitmap, int newWidth, int newHeight){
+        int width = originalBitmap.getWidth();
+        int height = originalBitmap.getHeight();
+        //定义转换高度
+        //int newWidth = 200;
+        //int newHeight = 200;
+        //计算宽高和缩放率
+        float scanleWidth = (float)newWidth/width;
+        float scanleHeight = (float)newHeight/height;
+        //创建操作图片用的matrix对象Matrix
+        Matrix matrix = new Matrix();
+        //缩放图片动作
+        matrix.postScale(scanleWidth,scanleHeight);
+        //旋转图片动作
+        //matrix.postRotate(45);
+        //创建新的图片Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(originalBitmap,0,0,width,height,matrix,true);
+        return resizedBitmap;
+    }
+
+
 
     //保存内容
     public void saveEdit(){
