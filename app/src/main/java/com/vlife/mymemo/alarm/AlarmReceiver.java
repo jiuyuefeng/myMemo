@@ -24,7 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("my","receive");
         if("com.MyBroadcast.alarm".equals(intent.getAction())){
             this.returnAlarm=(Notepad) intent.getSerializableExtra("Alarm");
-            Log.d("my","receiver"+returnAlarm.getId());
+            //Log.d("my","receiver"+returnAlarm.getId());
             Intent alarmIntent=new Intent(context, EditActivity.class);
             alarmIntent.putExtra("returnAlarm",returnAlarm);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, alarmIntent,

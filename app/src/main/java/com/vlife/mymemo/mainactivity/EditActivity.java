@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -37,7 +38,10 @@ import com.vlife.mymemo.sqlite.ChangeSqlite;
 import com.vlife.mymemo.sqlite.SqliteHelper;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2016/4/27 0027.
@@ -88,13 +92,16 @@ public class EditActivity extends BaseActivity {
         this.greenButton= ((Button)findViewById(R.id.green_button));
         this.redButton= ((Button)findViewById(R.id.red_button));
 
+        b = (Button) findViewById(R.id.picture_button);//图片导入按钮
+        e = (MyEditText) findViewById(R.id.content_edit);//图片编辑框
+
         this.notepad=new Notepad();
 
         //this.id = getIntent().getStringExtra("idItem");
 
         //响应闹钟
         this.notepadReturn=(Notepad) getIntent().getSerializableExtra("returnAlarm");
-        Log.d("my","notepadreturn"+notepadReturn);
+        //Log.d("my","notepadreturn"+notepadReturn);
         if(this.notepadReturn!=null){
             this.dateNow = new Date();
             this.date = this.dateNow.getDate();
@@ -106,6 +113,11 @@ public class EditActivity extends BaseActivity {
             this.editText.setSelection(this.editText.length());
             this.editText.setText(this.content);
             this.textView.setText(this.date);
+            try {
+                showImage(this.content);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
         }
         //非闹钟响应情况的
@@ -142,6 +154,11 @@ public class EditActivity extends BaseActivity {
             this.dateNow = new Date();
             this.date = this.dateNow.getDate();
             this.textView.setText(this.date);
+            try {
+                showImage(this.content);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
         }
 
@@ -240,7 +257,7 @@ public class EditActivity extends BaseActivity {
                                     saveEdit();
                                     mIsSave=true;
                                 }
-                                Log.d("my","mIsSave"+mIsSave);
+                                //Log.d("my","mIsSave"+mIsSave);
                                 notepad.id=id;
                                 notepad.content = content;
                                 notepad.background=bgId;
@@ -263,7 +280,7 @@ public class EditActivity extends BaseActivity {
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
                                 //显示闹钟设置成功的提示信息
                                 Toast.makeText(EditActivity.this, "闹钟设置成功", Toast.LENGTH_SHORT).show();
-                                Log.d("my","shijian"+c);
+                                //Log.d("my","shijian"+c);
                             }
                         }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
                     }
@@ -295,8 +312,7 @@ public class EditActivity extends BaseActivity {
 
 
         //照片导入方式选择
-        b = (Button) findViewById(R.id.picture_button);
-        e = (MyEditText) findViewById(R.id.content_edit);
+
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final CharSequence[] items = { "手机相册", "相机拍摄" };
@@ -309,7 +325,7 @@ public class EditActivity extends BaseActivity {
                                     Intent getImageByCamera= new Intent("android.media.action.IMAGE_CAPTURE");
                                     startActivityForResult(getImageByCamera, CAMERA_SUCCESS);
                                 }else{
-                                    Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
+                                    Intent getImage = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                                     getImage.addCategory(Intent.CATEGORY_OPENABLE);
                                     getImage.setType("image/*");
                                     startActivityForResult(getImage, PHOTO_SUCCESS);
@@ -334,7 +350,7 @@ public class EditActivity extends BaseActivity {
                     Bitmap bitmap = null;
                     try {
                         Bitmap originalBitmap = BitmapFactory.decodeStream(resolver.openInputStream(originalUri));
-                        bitmap = resizeImage(originalBitmap, 200, 200);
+                        bitmap = resizeImage(originalBitmap, 500, 500);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -342,16 +358,18 @@ public class EditActivity extends BaseActivity {
                         //根据Bitmap对象创建ImageSpan对象
                         ImageSpan imageSpan = new ImageSpan(EditActivity.this, bitmap);
                         //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片
-                        SpannableString spannableString = new SpannableString("[local]"+1+"[/local]");
-                        //用ImageSpan对象替换face
-                        spannableString.setSpan(imageSpan, 0, "[local]1[local]".length()+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        SpannableString spannableString = new SpannableString("[local]"+originalUri+"[/local]");
+                        //用ImageSpan对象替换文本
+                        spannableString.setSpan(imageSpan, 0,("[local]1[local]"+originalUri).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         //将选择的图片追加到EditText中光标所在的位置
                         int index = e.getSelectionStart(); //获取光标所在位置
                         Editable edit_text = e.getEditableText();
                         if(index <0 || index >= edit_text.length()){
                             edit_text.append(spannableString);
-                        }else{
+                            //edit_text.append("\r\n");
+                        } else{
                             edit_text.insert(index, spannableString);
+                            //edit_text.append("\r\n");
                         }
                     }else{
                         Toast.makeText(EditActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
@@ -361,20 +379,25 @@ public class EditActivity extends BaseActivity {
                     Bundle extras = intent.getExtras();
                     Bitmap originalBitmap1 = (Bitmap) extras.get("data");
                     if(originalBitmap1 != null){
-                        bitmap = resizeImage(originalBitmap1, 200, 200);
+                        //Uri originalUri1=intent.getData();//获取图片uri
+                        Uri originalUri1= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), originalBitmap1, null,null));
+                        bitmap = resizeImage(originalBitmap1, 500, 500);
                         //根据Bitmap对象创建ImageSpan对象
                         ImageSpan imageSpan = new ImageSpan(EditActivity.this, bitmap);
                         //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片�
-                        SpannableString spannableString = new SpannableString("[local]"+1+"[/local]");
+                        SpannableString spannableString = new SpannableString("[local]"+originalUri1+"[/local]");
                         //用ImageSpan对象替换face
-                        spannableString.setSpan(imageSpan, 0, "[local]1[local]".length()+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannableString.setSpan(imageSpan, 0, ("[local]1[local]"+originalUri1).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         //将选择的图片追加到EditText光标所在的位置
                         int index = e.getSelectionStart(); //获取光标所在位置
                         Editable edit_text = e.getEditableText();
                         if(index <0 || index >= edit_text.length()){
                             edit_text.append(spannableString);
-                        }else{
+                            //edit_text.append("\r\n");
+                        }
+                        else{
                             edit_text.insert(index, spannableString);
+                            //edit_text.append("\r\n");
                         }
                     }else{
                         Toast.makeText(EditActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
@@ -385,13 +408,9 @@ public class EditActivity extends BaseActivity {
             }
         }
     }
-    /**
-     * 图片缩放
-     * @param originalBitmap 原始的Bitmap
-     * @param newWidth 自定义宽度
-     * @param newHeight 自定义高度
-     * @return 缩放后的Bitmap
-     */
+
+
+    //图片缩放
     private Bitmap resizeImage(Bitmap originalBitmap, int newWidth, int newHeight){
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
@@ -448,4 +467,45 @@ public class EditActivity extends BaseActivity {
         date=localNotepad.date;
     }
 
+    //打开item之后获取图片
+    public void showImage(String text) throws IOException {
+        //通过正则表达式获得图片uri
+        Pattern pattern = Pattern.compile("content://((\\w){3,10}\\.)*((\\w){3,10}/)*((\\w){3,10}%)?(\\w){0,2}(\\d){6}");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            Log.d("my", matcher.group());
+            String strUri = matcher.group();
+            ContentResolver resolver = getContentResolver();
+            //得到当前图片的uri
+            Uri localUri = Uri.parse(matcher.group());
+            // 读取uri所在的图片
+            Bitmap bitmap = null;
+            try {
+                Bitmap originalBitmap = BitmapFactory.decodeStream(resolver.openInputStream(localUri));
+                bitmap = resizeImage(originalBitmap, 500, 500);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (bitmap != null) {
+                //根据Bitmap对象创建ImageSpan对象
+                ImageSpan imageSpan2 = new ImageSpan(EditActivity.this, bitmap);
+                //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片
+                SpannableString spannableString = new SpannableString("[local]" + localUri + "[/local]");
+                //用ImageSpan对象替换face
+                spannableString.setSpan(imageSpan2, 0, ("[local]1[local]" + localUri).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Log.d("my",""+("[local]1[local]" + localUri).length());
+                //获得当前图片uri所在的首下标,即图片插入位置
+                int index = text.indexOf(strUri)-7;
+                Log.d("my","图片位置"+index);
+                Editable edit_text = e.getEditableText();
+                if (index < 0 || index >= edit_text.length()) {
+                    edit_text.append(spannableString);
+                } else {
+                    edit_text.insert(index, spannableString);
+                    //edit_text.append("\r\n");
+                }
+            }
+        }
+    }
 }
