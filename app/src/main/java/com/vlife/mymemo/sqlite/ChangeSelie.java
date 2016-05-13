@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 2016/4/27 0027.
  */
-public class ChangeSqlite {
+public class ChangeSelie {
     public static String table = "table_notepad";
 
     public long add(SQLiteDatabase paramSQLiteDatabase, Notepad paramNotepad) {
@@ -35,11 +35,7 @@ public class ChangeSqlite {
         Cursor localCursor = paramSQLiteDatabase.query(table, new String[] {
                         "id", "title", "content", "date", "background"}, null, null, null, null,
                 null);
-        while (true) {
-            if (!localCursor.moveToNext()) {
-                paramSQLiteDatabase.close();
-                return localArrayList;
-            }
+        while(localCursor.moveToNext()){
             Notepad localNotepad = new Notepad();
             localNotepad.setId(localCursor.getString(localCursor
                     .getColumnIndex("id")));
@@ -54,7 +50,29 @@ public class ChangeSqlite {
             localArrayList.add(localNotepad);
             paramSQLiteDatabase.close();
         }
-        //localCursor.close();
+        paramSQLiteDatabase.close();
+        localCursor.close();
+        return localArrayList;
+//        while (true) {
+//            if (!localCursor.moveToNext()) {
+//                paramSQLiteDatabase.close();
+//                return localArrayList;
+//            }
+//            Notepad localNotepad = new Notepad();
+//            localNotepad.setId(localCursor.getString(localCursor
+//                    .getColumnIndex("id")));
+//            localNotepad.setTitle(localCursor.getString(localCursor
+//                    .getColumnIndex("title")));
+//            localNotepad.setContent(localCursor.getString(localCursor
+//                    .getColumnIndex("content")));
+//            localNotepad.setDate(localCursor.getString(localCursor
+//                    .getColumnIndex("date")));
+//            localNotepad.setBackground(localCursor.getInt(localCursor
+//                    .getColumnIndex("background")));
+//            localArrayList.add(localNotepad);
+//            paramSQLiteDatabase.close();
+//        }
+//        localCursor.close();
     }
 
 

@@ -2,6 +2,7 @@ package com.vlife.mymemo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -17,14 +18,14 @@ public class DateLine extends TextView{
     }
     public DateLine (Context context, AttributeSet attrs){
         super(context,attrs);
-        this.paint.setColor(16777216);
+        this.paint.setColor(Color.BLUE);
         this.paint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawLine(0.0F, 40.0F, getWidth(), 40.0F, this.paint);
+        canvas.drawLine(0.0F, 80.0F, getWidth(), 80.0F, this.paint);
         super.onDraw(canvas);
     }
 }

@@ -15,6 +15,8 @@
 <com.vlife.mymemo.ui.TextViewLine
     android:textSize="18.0sp"
     android:textColor="#ff000000"
+    android:ellipsize="end"
+    android:maxLines="2"
     android:id="@id/content_list_show"
     android:background="@drawable/bg_default"
     android:layout_width="300.0dip"

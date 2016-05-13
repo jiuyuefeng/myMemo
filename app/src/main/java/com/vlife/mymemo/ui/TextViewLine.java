@@ -2,6 +2,7 @@ package com.vlife.mymemo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ public class TextViewLine extends TextView {
     public TextViewLine(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        this.paint.setColor(16777216);
+        this.paint.setColor(Color.GRAY);
         this.paint.setStyle(Paint.Style.STROKE);
 
     }

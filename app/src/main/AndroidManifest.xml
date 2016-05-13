@@ -34,7 +34,7 @@
             android:name="com.vlife.mymemo.alarm.AlarmReceiver"
             android:enabled="true"
             android:exported="true"
-            ></receiver>
+            />
 
     </application>
 

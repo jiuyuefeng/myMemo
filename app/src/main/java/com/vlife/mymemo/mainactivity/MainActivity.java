@@ -11,26 +11,23 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.administrator.mymemo.R;
-import com.vlife.mymemo.sqlite.ChangeSqlite;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.adapter.NotepadAdapter;
-import com.vlife.mymemo.sqlite.SqliteHelper;
+import com.vlife.mymemo.sqlite.ChangeSelie;
+import com.vlife.mymemo.sqlite.SelieHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class MainActivity extends Activity {
-
-    public String EXPANDED = "EXPANDED";
     public NotepadAdapter adapter;
     public ArrayList<Map<String, Object>> itemList;
     public ListView listView;
-    public int number;
-    public Button numberButton;
-    public Button memoAddButton;
+    public int number;//item计数
+    public Button numberButton;//显示item数量
+    public Button memoAddButton;//添加item按钮
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,54 +56,46 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
         showUpdate();
     }
 
+    //更新显示
     public void showUpdate() {
-
-        this.itemList = new ArrayList<Map<String, Object>>();
-        SQLiteDatabase localSqLiteDatabase = new SqliteHelper(this, null, null, 1).getReadableDatabase();
-        Iterator<Notepad> localIterator = new ChangeSqlite().query(
-                localSqLiteDatabase).iterator();
-        while (true) {
-            if (!localIterator.hasNext()) {
-                Collections.reverse(this.itemList);
-                this.adapter = new NotepadAdapter(this, this.itemList);
-                this.listView.setAdapter(this.adapter);
-                if (this.itemList.size()==0) {
-                    number=0;
-                    this.numberButton.setText("(" + this.number + ")");
-                }
-                return;
-            }
-            Notepad localNotepad = localIterator.next();
+        this.itemList = new ArrayList<>();
+        SQLiteDatabase localSqLiteDatabase = new SelieHelper(this, null, null, 1).getReadableDatabase();
+        for (Notepad localNotepad : new ChangeSelie().query(
+                localSqLiteDatabase)) {
             HashMap<String, Object> localHashMap = new HashMap<>();
             localHashMap.put("titleItem", localNotepad.getTitle());
             localHashMap.put("dateItem", localNotepad.getDate());
             localHashMap.put("contentItem", localNotepad.getContent());
             localHashMap.put("idItem", localNotepad.getId());
-            localHashMap.put("backgroundItem",localNotepad.getBackground());
-            localHashMap.put("EXPANDED", true);
+            localHashMap.put("backgroundItem", localNotepad.getBackground());
+            //localHashMap.put("EXPANDED", true);
             this.itemList.add(localHashMap);
             this.number = this.itemList.size();
-            this.numberButton.setText("(" + this.number + ")");
+            this.numberButton.setText(String.format("(%d)", this.number));
         }
-
+        Collections.reverse(this.itemList);
+        this.adapter = new NotepadAdapter(this, this.itemList);
+        this.listView.setAdapter(this.adapter);
+        if (this.itemList.size()==0) {
+            number=0;
+            this.numberButton.setText(String.format("(%d)", this.number));
+        }
     }
 
-
+    //item点击事件响应
     class ItemClick implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> paramAdapterView,
                                 View paramView, int paramInt, long paramLong) {
-            //System.out.println("item----------click");
-
             Bundle bundle=new Bundle();
             Map<String, Object> localMap = MainActivity.this.itemList
                     .get(paramInt);
+            //设置要传递的参数
             bundle.putString("contentItem", (String)localMap.get("contentItem"));
             bundle.putString("dateItem", (String)localMap.get("dateItem"));
             bundle.putString("idItem", (String)localMap.get("idItem"));
@@ -116,7 +105,6 @@ public class MainActivity extends Activity {
             intent.putExtras(bundle);
             MainActivity.this.startActivity(intent);
         }
-
     }
 
 }
