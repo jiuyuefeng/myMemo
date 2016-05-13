@@ -97,7 +97,12 @@ public class NotepadAdapter extends BaseAdapter {
                 setShow.dateTypesShow.setBackgroundResource(R.drawable.bg_redtop);
             }
 
-            setShow.contentTypesShow.setText("   " + str);
+            //if(str.length()>30){
+            //    setShow.contentTypesShow.setText(str.substring(0,30)+"...");
+            //}
+            //else{
+            setShow.contentTypesShow.setText("" + str);
+            //}
             setShow.dateTypesShow.setText(dateStr);
             setShow.typesEditButton = (Button) arg1
                     .findViewById(R.id.types_edit_button);
@@ -141,6 +146,9 @@ public class NotepadAdapter extends BaseAdapter {
                 setShow.dateListShow.setBackgroundResource(R.drawable.bg_redtop);
             }
 
+            if(str.length()>40){
+                str= str.substring(0,40)+"...";
+            }
             setShow.contentListShow.setText("" + str);
             setShow.dateListShow.setText(dateStr);
             setShow.contentEditButton = (Button) arg1
