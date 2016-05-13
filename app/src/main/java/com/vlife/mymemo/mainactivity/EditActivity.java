@@ -421,7 +421,7 @@ public class EditActivity extends BaseActivity {
                         Editable edit_text = e.getEditableText();
                         if(index <0 || index >= edit_text.length()){
                             edit_text.append(spannableString);
-                            //edit_text.insert("\r\n");
+                            //edit_text.append("\r\n");
                         } else{
                             edit_text.insert(index, spannableString);
                             //edit_text.append("\r\n");
