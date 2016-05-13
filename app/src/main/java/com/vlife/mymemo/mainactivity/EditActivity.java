@@ -37,7 +37,9 @@ import com.vlife.mymemo.picture.MyEditText;
 import com.vlife.mymemo.sqlite.ChangeSqlite;
 import com.vlife.mymemo.sqlite.SqliteHelper;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -69,6 +71,7 @@ public class EditActivity extends BaseActivity {
     private Notepad notepadReturn=null;
     private Boolean mIsSave=false;//判断当前是否已经保存
 
+    private Button shareButton;//分享按钮
     private Button b;//导入照片按钮
     private MyEditText e;//编辑图片框
     private static final int PHOTO_SUCCESS = 2;
@@ -92,6 +95,7 @@ public class EditActivity extends BaseActivity {
         this.greenButton= ((Button)findViewById(R.id.green_button));
         this.redButton= ((Button)findViewById(R.id.red_button));
 
+        shareButton=(Button) findViewById(R.id.share_button);//分享按钮
         b = (Button) findViewById(R.id.picture_button);//图片导入按钮
         e = (MyEditText) findViewById(R.id.content_edit);//图片编辑框
 
@@ -328,8 +332,38 @@ public class EditActivity extends BaseActivity {
         });
 
 
-        //照片导入方式选择
+        //分享功能
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                if(!mIsSave){//判断是否已经保存
+                    saveEdit();
+                    mIsSave=true;
+                }
+                Intent intent=new Intent(Intent.ACTION_SEND);
+                if(content==deleteUri(content)){
+                    intent.setType("text/plain");
+                    intent.putExtra(intent.EXTRA_TEXT,content);
+                }
+                else{
+                    Bitmap bitmapView=convertViewToBitmap(editText);
+
+                    //Bundle extras = intent.getExtras();
+                    //Bitmap bitmap = (Bitmap) extras.get("data");
+                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmapView, null,null));
+                    intent.setType("image/*");
+                    intent.putExtra(intent.EXTRA_STREAM,uri);
+                }
+
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Share");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Intent.createChooser(intent, getTitle()));
+            }
+        });
+
+
+        //照片导入方式选择
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final CharSequence[] items = { "手机相册", "相机拍摄" };
@@ -353,6 +387,8 @@ public class EditActivity extends BaseActivity {
                 //e.insertDrawable(R.drawable.easy);
             }
         });
+
+
 
     }
 
@@ -385,7 +421,7 @@ public class EditActivity extends BaseActivity {
                         Editable edit_text = e.getEditableText();
                         if(index <0 || index >= edit_text.length()){
                             edit_text.append(spannableString);
-                            //edit_text.append("\r\n");
+                            //edit_text.insert("\r\n");
                         } else{
                             edit_text.insert(index, spannableString);
                             //edit_text.append("\r\n");
@@ -495,7 +531,7 @@ public class EditActivity extends BaseActivity {
         //int numIndex=0;//记录插入位置
         //int numLength=0;//记录图片uri的总长度
         while (matcher.find()) {
-            Log.d("my", "mycontentmatch"+matcher.group());
+            //Log.d("my", "mycontentmatch"+matcher.group());
             String strUri = matcher.group();
             ContentResolver resolver = getContentResolver();
             //得到当前图片的uri
@@ -556,4 +592,34 @@ public class EditActivity extends BaseActivity {
         }
         return text;
     }
+
+
+    //view转成bitmap
+    public Bitmap convertViewToBitmap(View view){
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+
+        //对图片进行缩放处理
+        //bitmap = resizeImage(bitmap, 800, 800);
+        //保存图片
+        File f = new File("/sdcard/camera", String.valueOf(bitmap));
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+           // Log.i(TAG, "已经保存");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
 }
