@@ -1,4 +1,4 @@
-package com.vlife.mymemo.mainactivity;
+package com.vlife.mymemo.edit;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -34,7 +34,7 @@ import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.alarm.AlarmReceiver;
 import com.vlife.mymemo.date.Date;
-import com.vlife.mymemo.edit.MyEditText;
+import com.vlife.mymemo.mainactivity.BaseActivity;
 import com.vlife.mymemo.sqlite.changeSqlite;
 import com.vlife.mymemo.sqlite.sqliteHelper;
 
@@ -59,11 +59,14 @@ public class EditActivity extends BaseActivity {
     private String date;//日期
     private String id=null;//item的ID
     private Integer bgId=0;//保存背景图片的ID
+    private Integer alarmId=0;//设置闹钟标志位
 
     private TextView textView;//日期栏
     private EditText editText;//文本栏
 
     private AlarmManager alarmManager;//闹钟管理对象
+    private Button alarmView;//闹钟是否设置图标按钮
+
     private Notepad notepad=null;//传出数据
     private Boolean mIsSave=false;//判断当前是否已经保存
 
@@ -87,6 +90,7 @@ public class EditActivity extends BaseActivity {
         Button redButton = ((Button) findViewById(R.id.red_button));//红色背景选择按钮
 
         Button alarmButton = (Button) findViewById(R.id.alarm_button);//闹钟按钮
+        alarmView=(Button) findViewById(R.id.alarm_view);//闹钟是否设置按钮
         Button shareButton = (Button) findViewById(R.id.share_button);//分享按钮
         Button pictureButton = (Button) findViewById(R.id.picture_button);//图片导入按钮
 
@@ -96,11 +100,14 @@ public class EditActivity extends BaseActivity {
         Notepad notepadReturn = (Notepad) getIntent().getSerializableExtra("returnAlarm"); //响应闹钟时传回的数据
         //判断是否有闹钟响应
         if(notepadReturn !=null){//闹钟响应
+            alarmView.setVisibility(View.INVISIBLE);//设置闹钟是否设置按钮为隐藏状态
             Date dateNow = new Date();
             this.date = dateNow.getDate();
             this.content= notepadReturn.getContent();
             this.bgId= notepadReturn.getBackground();
             this.id= notepadReturn.getId();
+            this.alarmId=notepadReturn.getAlarm();
+            Log.d("my","alarmId0"+alarmId);
 
             //显示详情
             this.textView.setText(this.date); //显示日期时间
@@ -114,13 +121,18 @@ public class EditActivity extends BaseActivity {
             } catch (IOException e1) {
                 Log.e("EditActivity","io:",e1);
             }
-
+            Log.d("my","id"+id);
+            //更新数据库（更新闹钟响应按钮）
+            saveEdit();
         }
         else {//非闹钟响应情况
             this.date = getIntent().getStringExtra("dateItem");
             this.content = getIntent().getStringExtra("contentItem");
             this.bgId = getIntent().getIntExtra("backgroundItem", 0);//获取当前背景ID
             this.id = getIntent().getStringExtra("idItem");
+            this.alarmId= getIntent().getIntExtra("alarmItem",0);//获取当前闹钟设置标志位
+            Log.d("my","alarmId1"+alarmId);
+
         }
        //判断是否是新建页
         if (id == null) { //编辑新建页
@@ -133,6 +145,12 @@ public class EditActivity extends BaseActivity {
             this.editText.setText(strContent);
         }
         else {//编辑已有页
+            if(this.alarmId==1){
+                alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位按钮为可见
+            }else{
+                alarmView.setVisibility(View.INVISIBLE);//设置闹钟标志位按钮为可见
+            }
+            Log.d("my","alarmId2"+alarmId);
             Date dateNow = new Date();
             this.date = dateNow.getDate();
             this.textView.setText(this.date);
@@ -193,17 +211,19 @@ public class EditActivity extends BaseActivity {
             }
         });
         //Log.d("my","contentlocal2"+content);
+        Log.d("my","alarmId3"+alarmId);
 
         // 闹钟按钮响应
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Calendar currentTime = Calendar.getInstance();//获取当前时间
+                 currentTime.setTimeInMillis(System.currentTimeMillis());
                 //创建一个DatePickerDialog实例，并把它显示出来
                 new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener(){
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        currentTime.setTimeInMillis(System.currentTimeMillis());
+
                         currentTime.set(Calendar.YEAR, year);
                         currentTime.set(Calendar.MONTH, monthOfYear);
                         currentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -214,31 +234,36 @@ public class EditActivity extends BaseActivity {
                                 //指定启动EditActivity组件
                                 Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
                                 intentReceiver.setAction(getString(R.string.MY_ACTION));
+
+                                alarmId=1;//设置闹钟标志位为1（即显示状态）
+
                                 //判断是否已经保存，如果未保存，则先保存
                                 if(!mIsSave){
                                     saveEdit();
+                                    Log.d("my","isSave"+mIsSave);
                                     mIsSave=true;
                                 }
                                 //设置闹钟要传递的数据
                                 //Log.d("my","mIsSave"+mIsSave);
                                 notepad.id=id;
+                                Log.d("my","idsend"+id);
                                 notepad.content = content;
                                 notepad.background=bgId;
                                 notepad.date = date;
+                                notepad.alarm=alarmId;
+                                Log.d("my","alarmId4"+alarmId);
                                 //传递数据
                                 intentReceiver.putExtra("Alarm",notepad);
                                 // 创建PendingIntent对象
-                                PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
-                                //获取当前时间
-                                Calendar c = Calendar.getInstance();
-                                c.setTimeInMillis(System.currentTimeMillis());
+                                PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
                                 //根据用户选择时间来设置Calendar对象
-                                c.set(Calendar.HOUR_OF_DAY, hour);
-                                c.set(Calendar.MINUTE, minute);
+                                currentTime.set(Calendar.HOUR_OF_DAY, hour);
+                                currentTime.set(Calendar.MINUTE, minute);
                                 //获取AlarmManager对象
                                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                                 //设置AlarmManager将在Calendar对应时间启动指定组件
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
+
                                 //显示闹钟设置成功的提示信息
                                 Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
                             }
@@ -248,6 +273,13 @@ public class EditActivity extends BaseActivity {
             }
         });
 
+        //闹钟编辑按钮响应
+        alarmView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         //确定保存按钮响应
         saveButton.setOnClickListener(new View.OnClickListener() {
 
@@ -428,17 +460,20 @@ public class EditActivity extends BaseActivity {
         localNotepad.setDate(date);
         localNotepad.setId(id);
         localNotepad.setBackground(bgId);
+        localNotepad.setAlarm(alarmId);
+        Log.d("my","alarmId5"+alarmId);
         if(id==null){
-            localChangeSqlite.add(localSqLiteDatabase, localNotepad);
+            long idLong = localChangeSqlite.add(localSqLiteDatabase, localNotepad);
+            id=Long.toString(idLong);
         }
         else{
             localChangeSqlite.update(localSqLiteDatabase, localNotepad);
-
         }
-        id=localNotepad.id;
         content=strContent;
-        bgId=localNotepad.background;
-        date=localNotepad.date;
+        bgId=localNotepad.getBackground();
+        date=localNotepad.getDate();
+        alarmId=localNotepad.getAlarm();
+        Log.d("my","idset"+id);
     }
 
     //打开item之后获取图片

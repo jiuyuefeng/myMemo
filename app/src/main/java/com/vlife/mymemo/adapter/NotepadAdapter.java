@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.administrator.mymemo.R;
-import com.vlife.mymemo.mainactivity.EditActivity;
+import com.vlife.mymemo.edit.EditActivity;
 import com.vlife.mymemo.mainactivity.MainActivity;
 import com.vlife.mymemo.sqlite.changeSqlite;
 import com.vlife.mymemo.sqlite.sqliteHelper;
@@ -33,6 +33,7 @@ public class NotepadAdapter extends BaseAdapter {
     public LayoutInflater inflater;
     public ArrayList<Map<String, Object>> list;
     public Integer bgId=0;//背景ID
+    public Integer alarmId=0;//闹钟设置标志位
 
     public NotepadAdapter(Activity activity, ArrayList<Map<String, Object>> list) {
 
@@ -68,6 +69,7 @@ public class NotepadAdapter extends BaseAdapter {
         String str = (String) list.get(arg0).get("contentItem");
         String dateStr = (String) list.get(arg0).get("dateItem");
         bgId= (Integer) list.get(arg0).get("backgroundItem");
+        alarmId=(Integer) list.get(arg0).get("alarmItem");
 
         //设置背景
         if(bgId==1) {
@@ -119,6 +121,7 @@ public class NotepadAdapter extends BaseAdapter {
             b.putString("dateItem", (String) list.get(position).get("dateItem"));
             b.putString("idItem", (String) list.get(position).get("idItem"));
             b.putInt("backgroundItem",(Integer) list.get(position).get("backgroundItem"));
+            b.putInt("alarmItem",(Integer) list.get(position).get("alarmItem"));
             //Log.d("bg",String.valueOf(bg_id));
             Intent intent = new Intent(context,
                     EditActivity.class);

@@ -12,7 +12,7 @@ public class Notepad implements Serializable{
     public String id;
     public String title;
     public Integer background;
-    //public String alarm;
+    public Integer alarm;
 
     public String getContent() {
         return this.content;
@@ -30,7 +30,7 @@ public class Notepad implements Serializable{
 
     public Integer getBackground() {return this.background;}
 
-    //public String getAlarm() {return this.alarm;}
+    public Integer getAlarm() {return this.alarm;}
 
     public void setContent(String paramString) {
         this.content = paramString;
@@ -46,6 +46,6 @@ public class Notepad implements Serializable{
 
     public void setBackground(Integer integer) {this.background = integer;}
 
-    //public void setAlarm(String paramString) {this.alarm = paramString;}
+    public void setAlarm(Integer integer) {this.alarm = integer;}
 
 }

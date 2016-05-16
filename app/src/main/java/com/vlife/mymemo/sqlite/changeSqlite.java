@@ -20,6 +20,7 @@ public class changeSqlite {
         localContentValues.put("date", paramNotepad.getDate());
         localContentValues.put("content", paramNotepad.getContent());
         localContentValues.put("background",paramNotepad.getBackground());
+        localContentValues.put("alarm",paramNotepad.getAlarm());
         long l = paramSQLiteDatabase.insert(table, null, localContentValues);
         paramSQLiteDatabase.close();
         return l;
@@ -33,7 +34,7 @@ public class changeSqlite {
     public ArrayList<Notepad> query(SQLiteDatabase paramSQLiteDatabase) {
         ArrayList<Notepad> localArrayList = new ArrayList<>();
         Cursor localCursor = paramSQLiteDatabase.query(table, new String[] {
-                        "id", "title", "content", "date", "background"}, null, null, null, null,
+                        "id", "title", "content", "date", "background", "alarm"}, null, null, null, null,
                 null);
         while(localCursor.moveToNext()){
             Notepad localNotepad = new Notepad();
@@ -47,32 +48,14 @@ public class changeSqlite {
                     .getColumnIndex("date")));
             localNotepad.setBackground(localCursor.getInt(localCursor
                     .getColumnIndex("background")));
+            localNotepad.setAlarm(localCursor.getInt(localCursor
+                    .getColumnIndex("alarm")));
             localArrayList.add(localNotepad);
             paramSQLiteDatabase.close();
         }
         paramSQLiteDatabase.close();
         localCursor.close();
         return localArrayList;
-//        while (true) {
-//            if (!localCursor.moveToNext()) {
-//                paramSQLiteDatabase.close();
-//                return localArrayList;
-//            }
-//            Notepad localNotepad = new Notepad();
-//            localNotepad.setId(localCursor.getString(localCursor
-//                    .getColumnIndex("id")));
-//            localNotepad.setTitle(localCursor.getString(localCursor
-//                    .getColumnIndex("title")));
-//            localNotepad.setContent(localCursor.getString(localCursor
-//                    .getColumnIndex("content")));
-//            localNotepad.setDate(localCursor.getString(localCursor
-//                    .getColumnIndex("date")));
-//            localNotepad.setBackground(localCursor.getInt(localCursor
-//                    .getColumnIndex("background")));
-//            localArrayList.add(localNotepad);
-//            paramSQLiteDatabase.close();
-//        }
-//        localCursor.close();
     }
 
 
@@ -82,6 +65,7 @@ public class changeSqlite {
         localContentValues.put("content", paramNotepad.getContent());
         localContentValues.put("date", paramNotepad.getDate());
         localContentValues.put("background",paramNotepad.getBackground());
+        localContentValues.put("alarm",paramNotepad.getAlarm());
         paramSQLiteDatabase.update(table, localContentValues, "id="
                 + paramNotepad.getId(), null);
         paramSQLiteDatabase.close();

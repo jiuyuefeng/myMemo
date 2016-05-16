@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.vlife.mymemo.mainactivity.BaseActivity" />
-        <activity android:name="com.vlife.mymemo.mainactivity.EditActivity" />
+        <activity android:name="com.vlife.mymemo.edit.EditActivity" />
 
         <receiver
             android:name="com.vlife.mymemo.alarm.AlarmReceiver"

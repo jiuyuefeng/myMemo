@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
-import com.vlife.mymemo.mainactivity.EditActivity;
+import com.vlife.mymemo.edit.EditActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -27,6 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             this.returnAlarm=(Notepad) intent.getSerializableExtra("Alarm");
             //Log.d("my","receiver"+returnAlarm.getId());
             Intent alarmIntent=new Intent(context, EditActivity.class);
+            returnAlarm.alarm=0;
             alarmIntent.putExtra("returnAlarm",returnAlarm);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, alarmIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);

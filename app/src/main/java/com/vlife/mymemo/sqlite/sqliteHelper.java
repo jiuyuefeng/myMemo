@@ -11,7 +11,7 @@ public class sqliteHelper extends SQLiteOpenHelper {
 
     private static String INFONAME;
     private static String NAME;
-    private static int VERSION = 1;
+    private static int VERSION = 2;
 
     static
     {
@@ -25,11 +25,11 @@ public class sqliteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table " + NAME + "(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT,date TEXT,content TEXT,background INTEGER(10))");
+        sqLiteDatabase.execSQL("create table " + NAME + "(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT,date TEXT,content TEXT,background INTEGER(10),alarm INTEGER(2))");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        //onCreate(sqLiteDatabase);
     }
 }

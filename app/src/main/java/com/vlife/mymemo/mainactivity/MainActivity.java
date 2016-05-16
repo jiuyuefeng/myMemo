@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.adapter.NotepadAdapter;
+import com.vlife.mymemo.edit.EditActivity;
 import com.vlife.mymemo.sqlite.changeSqlite;
 import com.vlife.mymemo.sqlite.sqliteHelper;
 
@@ -72,7 +73,7 @@ public class MainActivity extends Activity {
             localHashMap.put("contentItem", localNotepad.getContent());
             localHashMap.put("idItem", localNotepad.getId());
             localHashMap.put("backgroundItem", localNotepad.getBackground());
-            //localHashMap.put("EXPANDED", true);
+            localHashMap.put("alarmItem",localNotepad.getAlarm());
             this.itemList.add(localHashMap);
             this.number = this.itemList.size();
             this.numberButton.setText(String.format("%1$(2d", -this.number));
@@ -100,7 +101,7 @@ public class MainActivity extends Activity {
             bundle.putString("dateItem", (String)localMap.get("dateItem"));
             bundle.putString("idItem", (String)localMap.get("idItem"));
             bundle.putInt("backgroundItem",(Integer)localMap.get("backgroundItem"));
-
+            bundle.putInt("alarmItem",(Integer) localMap.get("alarmItem"));
             Intent intent=new Intent(MainActivity.this,EditActivity.class);
             intent.putExtras(bundle);
             MainActivity.this.startActivity(intent);
