@@ -152,6 +152,7 @@
         android:background="@drawable/alarm_view"
         android:layout_alignTop="@+id/date_edit"
         android:layout_toRightOf="@+id/date_edit"
-        android:layout_toEndOf="@+id/date_edit" />
+        android:layout_toEndOf="@+id/date_edit"
+        android:onClick="popupMenu"/>
 
 </RelativeLayout>

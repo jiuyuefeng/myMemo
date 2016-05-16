@@ -22,10 +22,13 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -273,13 +276,36 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-        //闹钟编辑按钮响应
+        //闹钟标志位编辑按钮响应
         alarmView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PopupMenu popupMenu=new PopupMenu(EditActivity.this,view);
+                MenuInflater inflater=popupMenu.getMenuInflater();
+                //引入菜单资源
+                //popupMenu.inflate(R.menu.popup_menu);
 
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.edit_alarm:
+                                Toast.makeText(context, "编辑", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.delete_alarm:
+                                Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                inflater.inflate(R.menu.popup_menu,popupMenu.getMenu());
+                popupMenu.show();
             }
         });
+
+
+
         //确定保存按钮响应
         saveButton.setOnClickListener(new View.OnClickListener() {
 
