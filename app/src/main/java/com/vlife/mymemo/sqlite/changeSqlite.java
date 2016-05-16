@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 2016/4/27 0027.
  */
-public class ChangeSelie {
+public class changeSqlite {
     public static String table = "table_notepad";
 
     public long add(SQLiteDatabase paramSQLiteDatabase, Notepad paramNotepad) {
@@ -31,7 +31,7 @@ public class ChangeSelie {
     }
 
     public ArrayList<Notepad> query(SQLiteDatabase paramSQLiteDatabase) {
-        ArrayList<Notepad> localArrayList = new ArrayList<Notepad>();
+        ArrayList<Notepad> localArrayList = new ArrayList<>();
         Cursor localCursor = paramSQLiteDatabase.query(table, new String[] {
                         "id", "title", "content", "date", "background"}, null, null, null, null,
                 null);

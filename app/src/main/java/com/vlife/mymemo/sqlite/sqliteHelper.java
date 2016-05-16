@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Administrator on 2016/4/27 0027.
  */
-public class SelieHelper extends SQLiteOpenHelper {
+public class sqliteHelper extends SQLiteOpenHelper {
 
     private static String INFONAME;
     private static String NAME;
@@ -19,7 +19,7 @@ public class SelieHelper extends SQLiteOpenHelper {
         INFONAME = "notepad.db";
     }
 
-    public SelieHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public sqliteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, INFONAME, null, VERSION);
     }
 

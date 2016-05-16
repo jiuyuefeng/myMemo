@@ -34,9 +34,9 @@ import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.alarm.AlarmReceiver;
 import com.vlife.mymemo.date.Date;
-import com.vlife.mymemo.picture.MyEditText;
-import com.vlife.mymemo.sqlite.ChangeSelie;
-import com.vlife.mymemo.sqlite.SelieHelper;
+import com.vlife.mymemo.edit.MyEditText;
+import com.vlife.mymemo.sqlite.changeSqlite;
+import com.vlife.mymemo.sqlite.sqliteHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,25 +46,29 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//import com.vlife.mymemo.picture.MyEditText;
+
 /**
  * Created by Administrator on 2016/4/27 0027.
  */
 public class EditActivity extends BaseActivity {
 
-    private String content;
-    private Context context = this;
-    private String date;
-    private String id=null;
+    private Context context = this;//上下文
+
+    private String content;//文本
+    private String date;//日期
+    private String id=null;//item的ID
     private Integer bgId=0;//保存背景图片的ID
+
     private TextView textView;//日期栏
     private EditText editText;//文本栏
-    private AlarmManager alarmManager;
+
+    private AlarmManager alarmManager;//闹钟管理对象
     private Notepad notepad=null;//传出数据
     private Boolean mIsSave=false;//判断当前是否已经保存
-    //private MyEditText e;//编辑图片框
+
     private static final int PHOTO_SUCCESS = 2;
     private static final int CAMERA_SUCCESS = 1;
-    //private static final String MY_ACTION="com.vlife.mymemo.action.ALARM_BROADCAST";
 
     @Override
     protected void onCreate(Bundle paramBundle) {
@@ -99,8 +103,7 @@ public class EditActivity extends BaseActivity {
             this.id= notepadReturn.getId();
 
             //显示详情
-            //显示日期时间
-            this.textView.setText(this.date);
+            this.textView.setText(this.date); //显示日期时间
             //显示纯文本
             String plainText=deleteUri(this.content);
             this.editText.setSelection(this.editText.length());
@@ -337,11 +340,11 @@ public class EditActivity extends BaseActivity {
                         //根据Bitmap对象创建ImageSpan对象
                         ImageSpan imageSpan = new ImageSpan(EditActivity.this, bitmap);
                         //获取替换字符串长度
-                        int oriuriLength=("[local]"+originalUri+"[/local]").length();
+                        int oriUriLength=(getString(R.string.local)+originalUri+getString(R.string.local2)).length();
                         //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片
-                        SpannableString spannableString = new SpannableString("[local]"+originalUri+"[/local]");
+                        SpannableString spannableString = new SpannableString(getString(R.string.local)+originalUri+getString(R.string.local2));
                         //用ImageSpan对象替换文本
-                        spannableString.setSpan(imageSpan, 0,oriuriLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannableString.setSpan(imageSpan, 0,oriUriLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         //将选择的图片追加到EditText中光标所在的位置
                         int index = editText.getSelectionStart(); //获取光标所在位置
                         Editable edit_text = editText.getEditableText();
@@ -366,9 +369,9 @@ public class EditActivity extends BaseActivity {
                         //根据Bitmap对象创建ImageSpan对象
                         ImageSpan imageSpan = new ImageSpan(EditActivity.this, resizeImage);
                         //创建一个SpannableString对象，以便插入用ImageSpan对象封装的图片�
-                        SpannableString spannableString = new SpannableString("[local]"+originalUri1+"[/local]");
+                        SpannableString spannableString = new SpannableString(getString(R.string.local)+originalUri1+getString(R.string.local2));
                         //用ImageSpan对象替换文本字符
-                        spannableString.setSpan(imageSpan, 0, ("[local]"+originalUri1+"[/local]").length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannableString.setSpan(imageSpan, 0, (getString(R.string.local)+originalUri1+getString(R.string.local2)).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         //将选择的图片追加到EditText光标所在的位置
                         int index = editText.getSelectionStart(); //获取光标所在位置
                         Editable edit_text = editText.getEditableText();
@@ -407,11 +410,11 @@ public class EditActivity extends BaseActivity {
 
     //保存内容
     public void saveEdit(){
-        SQLiteDatabase localSqLiteDatabase = new SelieHelper(
+        SQLiteDatabase localSqLiteDatabase = new sqliteHelper(
                 EditActivity.this.context, null, null, 0)
                 .getWritableDatabase();
         Notepad localNotepad = new Notepad();
-        ChangeSelie localChangeSqlite = new ChangeSelie();
+        changeSqlite localChangeSqlite = new changeSqlite();
         String strContent = EditActivity.this.editText.getText()
                 .toString();
         if (strContent.equals("")) {
@@ -419,10 +422,9 @@ public class EditActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        String strTitle = strContent.length() > 11 ? " "
-                + strContent.substring(0, 11) : strContent;
+        //String strTitle = strContent.length() > 11 ? "       " + strContent.substring(0, 11) : strContent;
         localNotepad.setContent(strContent);
-        localNotepad.setTitle(strTitle);
+        //localNotepad.setTitle(strTitle);
         localNotepad.setDate(date);
         localNotepad.setId(id);
         localNotepad.setBackground(bgId);
@@ -446,7 +448,7 @@ public class EditActivity extends BaseActivity {
         Matcher matcher = pattern.matcher(text);
         //遍历所有的uri
         while (matcher.find()) {
-            //Log.d("my", "mycontentmatch"+matcher.group());
+            //Log.d("my", "myContentMatch"+matcher.group());
             String strUri = matcher.group();
             ContentResolver resolver = getContentResolver();
             //得到当前图片的uri
@@ -488,7 +490,7 @@ public class EditActivity extends BaseActivity {
     //删除文本中的uri以得到纯文本
     public String deleteUri(String text){
         //通过正则表达式获得图片uri
-        Pattern pattern = Pattern.compile("content://((\\w){3,10}\\.)*((\\w){3,10}/)*((\\w){3,10}%)?(\\w){0,2}(\\d){6}");
+        Pattern pattern = Pattern.compile(getString(R.string.MyRegex));
         Matcher matcher = pattern.matcher(text);
         while(matcher.find()){
             String strUri = matcher.group();
@@ -512,7 +514,8 @@ public class EditActivity extends BaseActivity {
         //保存图片
         File f = new File(Environment.getExternalStorageDirectory().getPath(), String.valueOf(bitmap));
         if (f.exists()) {
-            f.delete();
+            Boolean fd=f.delete();
+            Log.i("my", String.valueOf(fd));
         }
         try {
             FileOutputStream out = new FileOutputStream(f);

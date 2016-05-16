@@ -13,8 +13,8 @@ import android.widget.ListView;
 import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.adapter.NotepadAdapter;
-import com.vlife.mymemo.sqlite.ChangeSelie;
-import com.vlife.mymemo.sqlite.SelieHelper;
+import com.vlife.mymemo.sqlite.changeSqlite;
+import com.vlife.mymemo.sqlite.sqliteHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,8 +63,8 @@ public class MainActivity extends Activity {
     //更新显示
     public void showUpdate() {
         this.itemList = new ArrayList<>();
-        SQLiteDatabase localSqLiteDatabase = new SelieHelper(this, null, null, 1).getReadableDatabase();
-        for (Notepad localNotepad : new ChangeSelie().query(
+        SQLiteDatabase localSqLiteDatabase = new sqliteHelper(this, null, null, 1).getReadableDatabase();
+        for (Notepad localNotepad : new changeSqlite().query(
                 localSqLiteDatabase)) {
             HashMap<String, Object> localHashMap = new HashMap<>();
             localHashMap.put("titleItem", localNotepad.getTitle());
@@ -75,14 +75,14 @@ public class MainActivity extends Activity {
             //localHashMap.put("EXPANDED", true);
             this.itemList.add(localHashMap);
             this.number = this.itemList.size();
-            this.numberButton.setText(String.format("(%d)", this.number));
+            this.numberButton.setText(String.format("%1$(2d", -this.number));
         }
         Collections.reverse(this.itemList);
         this.adapter = new NotepadAdapter(this, this.itemList);
         this.listView.setAdapter(this.adapter);
         if (this.itemList.size()==0) {
             number=0;
-            this.numberButton.setText(String.format("(%d)", this.number));
+            this.numberButton.setText(String.format("%1$(2d", -this.number));
         }
     }
 

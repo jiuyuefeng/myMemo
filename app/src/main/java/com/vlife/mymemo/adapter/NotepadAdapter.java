@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.mainactivity.EditActivity;
 import com.vlife.mymemo.mainactivity.MainActivity;
-import com.vlife.mymemo.sqlite.ChangeSelie;
-import com.vlife.mymemo.sqlite.SelieHelper;
+import com.vlife.mymemo.sqlite.changeSqlite;
+import com.vlife.mymemo.sqlite.sqliteHelper;
 import com.vlife.mymemo.ui.TextViewLine;
 
 import java.util.ArrayList;
@@ -101,21 +101,17 @@ public class NotepadAdapter extends BaseAdapter {
                 .findViewById(R.id.content_delete_button);
         setShow.contentDeleteButton
                 .setOnClickListener(new DeleteButtonListener(arg0));
-        //}
         return arg1;
     }
 
+    //写事件响应
     class WriteButtonListener implements View.OnClickListener {
         private int position;
-
         public WriteButtonListener(int position) {
             this.position = position;
         }
-
         @Override
         public void onClick(View v) {
-            // TODO Auto-generated method stub
-
             //传递数据
             Bundle b = new Bundle();
             b.putString("contentItem",
@@ -128,67 +124,54 @@ public class NotepadAdapter extends BaseAdapter {
                     EditActivity.class);
             intent.putExtras(b);
             (context).startActivity(intent);
-
         }
-
     }
 
+    //删除事件响应
     class DeleteButtonListener implements View.OnClickListener {
         private int position;
-
         public DeleteButtonListener(int position) {
             this.position = position;
-
         }
-
         @Override
         public void onClick(View v) {
 
             android.app.AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("确定删除？");
-            builder.setPositiveButton("删除",
+            builder.setTitle(R.string.SureDelete);
+            builder.setPositiveButton(R.string.Delete,
                     new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            // TODO Auto-generated method stub
-                            SelieHelper sql = new SelieHelper(context, null,
+                            sqliteHelper sql = new sqliteHelper(context, null,
                                     null, 1);
                             SQLiteDatabase dataBase = sql.getWritableDatabase();
-                            ChangeSelie change = new ChangeSelie();
+                            changeSqlite change = new changeSqlite();
                             Notepad notepad = new Notepad();
                             notepad.setId((String) list.get(position).get(
                                     "idItem"));
                             change.delete(dataBase, notepad);
                             ((MainActivity) context).showUpdate();
-
                         }
                     });
-            builder.setNegativeButton("取消",
+            builder.setNegativeButton(R.string.Cancel1,
                     new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // TODO Auto-generated method stub
                             dialog.dismiss();
                         }
                     });
             builder.create();
             builder.show();
         }
-
     }
 
     class SetShow {
-       // public TextView contentTypesShow;
-        //public TextView dateTypesShow;
         public TextViewLine contentListShow;
         public TextView dateListShow;
         public Button contentEditButton;
         public Button contentDeleteButton;
-        //public Button typesEditButton;
-        //public Button typesDeleteButton;
-
     }
 
 }

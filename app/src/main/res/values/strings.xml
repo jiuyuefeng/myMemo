@@ -14,4 +14,10 @@
     <string name="FailedGetPicture">获取图片失败</string>
     <string name="data">data</string>
     <string name="PleaseInput">请输入内容</string>
+    <string name="SureDelete">确定删除？</string>
+    <string name="Delete">删除</string>
+    <string name="Cancel1">取消</string>
+    <string name="MyRegex">content://((\\w){3,10}\\.)*((\\w){3,10}/)*((\\w){3,10}%)?(\\w){0,2}(\\d){6}</string>
+    <string name="local">[local]</string>
+    <string name="local2">[/local]</string>
 </resources>

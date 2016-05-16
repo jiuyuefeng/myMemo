@@ -16,7 +16,6 @@ import com.vlife.mymemo.mainactivity.EditActivity;
 public class AlarmReceiver extends BroadcastReceiver {
 
     private Notepad returnAlarm;
-    //private static final String MY_ACTION="com.vlife.mymemo.action.ALARM_BROADCAST";
 
     public AlarmReceiver() {
     }
@@ -32,6 +31,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, alarmIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
+            //设置通知栏
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             String message=returnAlarm.getContent();
@@ -39,12 +39,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                 message=message.substring(0,30)+"...";
             }
             builder.setContentTitle(context.getString(R.string.app_name)).setContentText(message).
-                    setSmallIcon(R.mipmap.ic_launcher).setDefaults(Notification.DEFAULT_ALL).
+                    setSmallIcon(R.drawable.icon_app).setDefaults(Notification.DEFAULT_ALL).
                     setContentIntent(pendingIntent).setAutoCancel(true);
             manager.notify(1, builder.build());
-
-            //alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //context.startActivity(alarmIntent);
             }
     }
 }
