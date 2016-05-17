@@ -29,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             Intent alarmIntent=new Intent(context, EditActivity.class);
             returnAlarm.alarm=0;
             alarmIntent.putExtra("returnAlarm",returnAlarm);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, alarmIntent,
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, Integer.parseInt(returnAlarm.getId()), alarmIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             //设置通知栏

@@ -49,9 +49,9 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import com.vlife.mymemo.picture.MyEditText;
 
 /**
+ *  编辑页面
  * Created by Administrator on 2016/4/27 0027.
  */
 public class EditActivity extends BaseActivity {
@@ -97,6 +97,11 @@ public class EditActivity extends BaseActivity {
         Button pictureButton = (Button) findViewById(R.id.picture_button);//图片导入按钮
 
         this.notepad=new Notepad(); //声明闹钟要传递的数据对象
+
+        /**
+         *  闹钟响应与非闹钟响应的分别处理
+         *
+         */
 
         // 闹钟响应
         Notepad notepadReturn = (Notepad) getIntent().getSerializableExtra("returnAlarm"); //响应闹钟时传回的数据
@@ -171,7 +176,10 @@ public class EditActivity extends BaseActivity {
         //显示编辑前的背景
         chooseBackground(bgId);
 
-        //设置背景
+        /**
+         * 设置背景
+         *
+         */
         yellowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,10 +220,12 @@ public class EditActivity extends BaseActivity {
                 bgId=5;
             }
         });
-        //Log.d("my","contentlocal2"+content);
         Log.d("my","alarmId3"+alarmId);
 
-        // 闹钟按钮响应
+        /**
+         *  闹钟按钮响应
+         *
+         */
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -224,7 +234,10 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-        //闹钟标志位编辑按钮响应
+        /**
+         * 闹钟标志位编辑按钮响应
+         *
+         */
         alarmView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,15 +251,10 @@ public class EditActivity extends BaseActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.edit_alarm:
-                                //Toast.makeText(context, "编辑", Toast.LENGTH_SHORT).show();
                                 setAlarm();
-                                //alarmId=1;//设置闹钟标志位为1（即显示状态）
-                                //alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
                                 break;
                             case R.id.delete_alarm:
-                                //Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
                                 deleteAlarm();
-                                //alarmId=0;
                                 alarmView.setVisibility(View.INVISIBLE);//设置闹钟标志位位隐藏状态
                                 break;
                         }
@@ -258,9 +266,10 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-
-
-        //确定保存按钮响应
+        /**
+         *  确定保存按钮响应
+         *
+         */
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -271,7 +280,10 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-        //取消保存按钮响应
+        /**
+         *  取消保存按钮响应
+         *
+         */
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,7 +291,10 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-        //分享功能
+        /**
+         *  分享功能按钮响应
+         *
+         */
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -303,7 +318,10 @@ public class EditActivity extends BaseActivity {
             }
         });
 
-        //照片导入方式选择
+        /**
+         *  照片导入方式选择（照片导入按钮响应）
+         *
+         */
         pictureButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final CharSequence[] items = { getString(R.string.Photo), getString(R.string.Camera) };
@@ -328,7 +346,16 @@ public class EditActivity extends BaseActivity {
         });
     }
 
-    //设置闹钟
+
+    /**
+     * 各方法的封装函数
+     */
+
+
+    /**
+     *  设置闹钟
+     *
+     */
     public void setAlarm(){
         boolean saveSuccess=saveEdit();
         if(saveSuccess){//设置闹钟之前先判断是否保存
@@ -350,9 +377,6 @@ public class EditActivity extends BaseActivity {
                             Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
                             intentReceiver.setAction(getString(R.string.MY_ACTION));
 
-                            alarmId=1;
-                            alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
-
                             //设置闹钟要传递的数据
                             notepad.id=id;
                             //Log.d("my","idsend"+id);
@@ -364,17 +388,23 @@ public class EditActivity extends BaseActivity {
                             //传递数据
                             intentReceiver.putExtra("Alarm",notepad);
                             // 创建PendingIntent对象
-                            PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
+                            PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, Integer.parseInt(id), intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
                             //根据用户选择时间来设置Calendar对象
                             currentTime.set(Calendar.HOUR_OF_DAY, hour);
                             currentTime.set(Calendar.MINUTE, minute);
                             //获取AlarmManager对象
                             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                            //设置AlarmManager将在Calendar对应时间启动指定组件
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
 
-                            //显示闹钟设置成功的提示信息
-                            Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
+                            if(!currentTime.before(Calendar.getInstance())){//判断时间是否设置合理
+                                // 设置AlarmManager将在Calendar对应时间启动指定组件
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
+                                alarmId=1;
+                                alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
+                                //显示闹钟设置成功的提示信息
+                                Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(EditActivity.this, R.string.AlarmFaild, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
                 }
@@ -382,10 +412,11 @@ public class EditActivity extends BaseActivity {
         }
     }
 
-    //取消闹钟
+    /**
+     *  取消闹钟
+     *
+     */
     public void deleteAlarm(){
-        // Create the same intent, and thus a matching IntentSender, for
-        // the one that was scheduled.
         Intent intent = new Intent(EditActivity.this,
                 AlarmReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(
@@ -398,7 +429,12 @@ public class EditActivity extends BaseActivity {
         saveEdit();//更新数据库（即编辑闹钟设置）
     }
 
-    //导入图片
+    /**
+     *   导入图片
+     * @param requestCode 通过下标值选择导入图片方式
+     * @param resultCode 是否选择了导入方式
+     * @param intent 通过intent传入数据
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         ContentResolver resolver = getContentResolver();
         if (resultCode == RESULT_OK) {
@@ -471,7 +507,13 @@ public class EditActivity extends BaseActivity {
         }
     }
 
-    //图片缩放(属性设置)
+    /**
+     *   图片缩放(属性设置)
+     * @param originalBitmap 原始图片
+     * @param newWidth   自定义宽度
+     * @param newHeight  自定义高度
+     * @return 处理后的Bitmap
+     */
     private Bitmap resizeImage(Bitmap originalBitmap, int newWidth, int newHeight){
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
@@ -486,7 +528,10 @@ public class EditActivity extends BaseActivity {
         return Bitmap.createBitmap(originalBitmap,0,0,width,height,matrix,true);
     }
 
-    //保存内容
+    /**
+     *  保存内容
+     * @return 是否成功保存编辑
+     */
     public boolean saveEdit(){
         SQLiteDatabase localSqLiteDatabase = new sqliteHelper(
                 EditActivity.this.context, null, null, 0)
@@ -524,10 +569,14 @@ public class EditActivity extends BaseActivity {
         }
     }
 
-    //打开item之后获取图片
+    /**
+     *  打开item之后获取并显示图片
+     * @param text=content
+     * @throws IOException
+     */
     public void showImage(String text) throws IOException {
         //通过正则表达式获得图片uri
-        Pattern pattern = Pattern.compile("content://((\\w){3,10}\\.)*((\\w){3,10}/)*((\\w){3,10}%)?(\\w){0,2}(\\d){6}");
+        Pattern pattern = Pattern.compile(getString(R.string.MyRegex));
         Matcher matcher = pattern.matcher(text);
         //遍历所有的uri
         while (matcher.find()) {
@@ -570,7 +619,11 @@ public class EditActivity extends BaseActivity {
         }
     }
 
-    //删除文本中的uri以得到纯文本
+    /**
+     *  删除文本中的uri以得到纯文本
+     * @param text=content
+     * @return 纯文本
+     */
     public String deleteUri(String text){
         //通过正则表达式获得图片uri
         Pattern pattern = Pattern.compile(getString(R.string.MyRegex));
@@ -588,7 +641,11 @@ public class EditActivity extends BaseActivity {
         return text;
     }
 
-    //view转成bitmap
+    /**
+     *  view转成bitmap
+     * @param view=context
+     * @return Bitmap
+     */
     public Bitmap convertViewToBitmap(View view){
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
@@ -612,7 +669,10 @@ public class EditActivity extends BaseActivity {
         return bitmap;
     }
 
-    //选择背景
+    /**
+     *   选择并设置背景
+     * @param i=bgId
+     */
     private void chooseBackground(int i){
         TextView textView = ((TextView) findViewById(R.id.date_edit));
         EditText editText = ((MyEditText) findViewById(R.id.content_edit));
