@@ -222,6 +222,7 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 //设置闹钟
                 setAlarm();
+                //alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位为显示状态
                 //刷新界面
 //                Intent intent=new Intent(EditActivity.this,EditActivity.class);
 //                startActivity(intent);
@@ -245,13 +246,14 @@ public class EditActivity extends BaseActivity {
                             case R.id.edit_alarm:
                                 //Toast.makeText(context, "编辑", Toast.LENGTH_SHORT).show();
                                 setAlarm();
-
+                                //alarmId=1;//设置闹钟标志位为1（即显示状态）
+                                //alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
                                 break;
                             case R.id.delete_alarm:
                                 //Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
                                 deleteAlarm();
-                                alarmId=0;
-                                saveEdit();//更新数据库（即编辑闹钟设置）
+                                //alarmId=0;
+                                alarmView.setVisibility(View.INVISIBLE);//设置闹钟标志位位隐藏状态
                                 break;
                         }
                         return false;
@@ -356,8 +358,8 @@ public class EditActivity extends BaseActivity {
                         Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
                         intentReceiver.setAction(getString(R.string.MY_ACTION));
 
-                        alarmId=1;//设置闹钟标志位为1（即显示状态）
-
+                        alarmId=1;
+                        alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
                         //判断是否已经保存，如果未保存，则先保存
                         if(!mIsSave){
                             saveEdit();
@@ -376,7 +378,7 @@ public class EditActivity extends BaseActivity {
                         //传递数据
                         intentReceiver.putExtra("Alarm",notepad);
                         // 创建PendingIntent对象
-                        PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
                         //根据用户选择时间来设置Calendar对象
                         currentTime.set(Calendar.HOUR_OF_DAY, hour);
                         currentTime.set(Calendar.MINUTE, minute);
@@ -400,11 +402,13 @@ public class EditActivity extends BaseActivity {
         Intent intent = new Intent(EditActivity.this,
                 AlarmReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(
-                EditActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                EditActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         // And cancel the alarm.
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
         am.cancel(sender);
+        alarmId=0;
+        saveEdit();//更新数据库（即编辑闹钟设置）
     }
 
     //导入图片

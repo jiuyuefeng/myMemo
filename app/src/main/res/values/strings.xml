@@ -20,4 +20,6 @@
     <string name="MyRegex">content://((\\w){3,10}\\.)*((\\w){3,10}/)*((\\w){3,10}%)?(\\w){0,2}(\\d){6}</string>
     <string name="local">[local]</string>
     <string name="local2">[/local]</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
 </resources>
