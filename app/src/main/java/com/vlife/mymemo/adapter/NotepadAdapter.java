@@ -72,7 +72,10 @@ public class NotepadAdapter extends BaseAdapter {
         bgId= (Integer) list.get(arg0).get("backgroundItem");
         alarmId=(Integer) list.get(arg0).get("alarmItem");
 
-        //设置背景
+        /**
+         *  设置背景
+         *
+         */
         if(bgId==1) {
             setShow.contentListShow.setBackgroundResource(R.drawable.bg_yellow);
             setShow.dateListShow.setBackgroundResource(R.drawable.bg_yellowtop);
@@ -107,7 +110,10 @@ public class NotepadAdapter extends BaseAdapter {
         return arg1;
     }
 
-    //写事件响应
+    /**
+     *  写事件响应
+     *
+     */
     class WriteButtonListener implements View.OnClickListener {
         private int position;
         public WriteButtonListener(int position) {
