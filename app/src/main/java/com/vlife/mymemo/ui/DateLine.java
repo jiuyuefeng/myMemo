@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 /**
+ * 画出日期栏
  * Created by Administrator on 2016/4/27 0027.
  */
 public class DateLine extends TextView{

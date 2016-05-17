@@ -3,6 +3,7 @@ package com.vlife.mymemo.date;
 import java.util.Calendar;
 
 /**
+ * 设置日期和时间
  * Created by Administrator on 2016/4/27 0027.
  */
 public class Date {

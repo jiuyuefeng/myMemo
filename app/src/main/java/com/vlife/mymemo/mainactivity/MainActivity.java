@@ -22,6 +22,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 主页面Activity
+ *
+ */
+
 public class MainActivity extends Activity {
     public NotepadAdapter adapter;
     public ArrayList<Map<String, Object>> itemList;

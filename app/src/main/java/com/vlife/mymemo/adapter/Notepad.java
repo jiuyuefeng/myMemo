@@ -3,6 +3,7 @@ package com.vlife.mymemo.adapter;
 import java.io.Serializable;
 
 /**
+ * 封装基本数据类
  * Created by Administrator on 2016/4/27 0027.
  */
 public class Notepad implements Serializable{

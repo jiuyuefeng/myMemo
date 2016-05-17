@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * 自定义listView适配器
  * Created by Administrator on 2016/4/27 0027.
  */
 public class NotepadAdapter extends BaseAdapter {

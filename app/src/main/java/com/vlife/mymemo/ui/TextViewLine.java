@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 /**
+ * listView文本栏划线
  * Created by Administrator on 2016/4/27 0027.
  */
 public class TextViewLine extends TextView {

@@ -9,6 +9,7 @@ import com.vlife.mymemo.adapter.Notepad;
 import java.util.ArrayList;
 
 /**
+ * 操作数据库
  * Created by Administrator on 2016/4/27 0027.
  */
 public class changeSqlite {

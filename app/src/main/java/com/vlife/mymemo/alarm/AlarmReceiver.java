@@ -13,6 +13,11 @@ import com.example.administrator.mymemo.R;
 import com.vlife.mymemo.adapter.Notepad;
 import com.vlife.mymemo.edit.EditActivity;
 
+/**
+ * 闹钟广播接收
+ *
+ */
+
 public class AlarmReceiver extends BroadcastReceiver {
 
     private Notepad returnAlarm;
