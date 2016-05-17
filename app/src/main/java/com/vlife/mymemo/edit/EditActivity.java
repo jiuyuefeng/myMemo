@@ -71,7 +71,7 @@ public class EditActivity extends BaseActivity {
     private Button alarmView;//闹钟是否设置图标按钮
 
     private Notepad notepad=null;//传出数据
-    private Boolean mIsSave=false;//判断当前是否已经保存
+    //private Boolean mIsSave=false;//判断当前是否已经保存
 
     private static final int PHOTO_SUCCESS = 2;
     private static final int CAMERA_SUCCESS = 1;
@@ -79,7 +79,6 @@ public class EditActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
-        mIsSave=false;
         setContentView(R.layout.edit_show);
         this.textView = ((TextView) findViewById(R.id.date_edit));//日期栏
         this.editText = ((MyEditText) findViewById(R.id.content_edit));//文本栏
@@ -222,11 +221,6 @@ public class EditActivity extends BaseActivity {
             public void onClick(View view) {
                 //设置闹钟
                 setAlarm();
-                //alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位为显示状态
-                //刷新界面
-//                Intent intent=new Intent(EditActivity.this,EditActivity.class);
-//                startActivity(intent);
-
             }
         });
 
@@ -271,11 +265,9 @@ public class EditActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                if(!mIsSave){
-                    saveEdit();
-                    mIsSave=true;
-                }
-                finish();
+                boolean saveSuccess=saveEdit();//判断是否保存成功
+                if(saveSuccess){
+                    finish();}
             }
         });
 
@@ -291,26 +283,23 @@ public class EditActivity extends BaseActivity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //判断是否已经保存
-                if(!mIsSave){
-                    saveEdit();
-                    mIsSave=true;
+                boolean saveSuccess=saveEdit();
+                if(saveSuccess) {//分享之前先判断是否保存
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    //判断分享内容是否含图片
+                    if (content.equals(deleteUri(content))) {//不包含图片，即纯文本
+                        intent.setType("text/plain");
+                        intent.putExtra(Intent.EXTRA_TEXT, content);
+                    } else {//包含图片
+                        Bitmap bitmapView = convertViewToBitmap(editText);//将当前文本栏转化成bitmap
+                        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmapView, null, null));//获取bitmap的uri
+                        intent.setType("image/*");
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    }
+                    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.Share));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(Intent.createChooser(intent, getTitle()));
                 }
-                Intent intent=new Intent(Intent.ACTION_SEND);
-                //判断分享内容是否含图片
-                if(content.equals(deleteUri(content))){//不包含图片，即纯文本
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT,content);
-                }
-                else{//包含图片
-                    Bitmap bitmapView=convertViewToBitmap(editText);//将当前文本栏转化成bitmap
-                    Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmapView, null,null));//获取bitmap的uri
-                    intent.setType("image/*");
-                    intent.putExtra(Intent.EXTRA_STREAM,uri);
-                }
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.Share));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(Intent.createChooser(intent, getTitle()));
             }
         });
 
@@ -321,17 +310,18 @@ public class EditActivity extends BaseActivity {
                 AlertDialog dlg = new AlertDialog.Builder(EditActivity.this).setTitle(R.string.ChoosePicture).setItems(items,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int item) {
-                                //在item数组里定义了两种方式，拍照的数标为1（调用拍照）
-                                if(item==1){
-                                    Intent getImageByCamera= new Intent(getString(R.string.CameraCapturePicture));
-                                    startActivityForResult(getImageByCamera, CAMERA_SUCCESS);
-                                }else{
-                                    Intent getImage = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                                    getImage.addCategory(Intent.CATEGORY_OPENABLE);
-                                    getImage.setType("image/*");
-                                    startActivityForResult(getImage, PHOTO_SUCCESS);
+
+                                    //在item数组里定义了两种方式，拍照的数标为1（调用拍照）
+                                    if(item==1){
+                                        Intent getImageByCamera= new Intent(getString(R.string.CameraCapturePicture));
+                                        startActivityForResult(getImageByCamera, CAMERA_SUCCESS);
+                                    }else{
+                                        Intent getImage = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                                        getImage.addCategory(Intent.CATEGORY_OPENABLE);
+                                        getImage.setType("image/*");
+                                        startActivityForResult(getImage, PHOTO_SUCCESS);
+                                    }
                                 }
-                            }
                         }).create();
                 dlg.show();
             }
@@ -340,59 +330,56 @@ public class EditActivity extends BaseActivity {
 
     //设置闹钟
     public void setAlarm(){
-        final Calendar currentTime = Calendar.getInstance();//获取当前时间
-        currentTime.setTimeInMillis(System.currentTimeMillis());
-        //创建一个DatePickerDialog实例，并把它显示出来
-        new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener(){
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        boolean saveSuccess=saveEdit();
+        if(saveSuccess){//设置闹钟之前先判断是否保存
+            final Calendar currentTime = Calendar.getInstance();//获取当前时间
+            currentTime.setTimeInMillis(System.currentTimeMillis());
+            //创建一个DatePickerDialog实例，并把它显示出来
+            new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener(){
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-                currentTime.set(Calendar.YEAR, year);
-                currentTime.set(Calendar.MONTH, monthOfYear);
-                currentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                //创建一个TimePickerDialog实例，并把它显示出来
-                new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        //指定启动EditActivity组件
-                        Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
-                        intentReceiver.setAction(getString(R.string.MY_ACTION));
+                    currentTime.set(Calendar.YEAR, year);
+                    currentTime.set(Calendar.MONTH, monthOfYear);
+                    currentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    //创建一个TimePickerDialog实例，并把它显示出来
+                    new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                            //指定启动EditActivity组件
+                            Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
+                            intentReceiver.setAction(getString(R.string.MY_ACTION));
 
-                        alarmId=1;
-                        alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
-                        //判断是否已经保存，如果未保存，则先保存
-                        if(!mIsSave){
-                            saveEdit();
-                            Log.d("my","isSave"+mIsSave);
-                            mIsSave=true;
+                            alarmId=1;
+                            alarmView.setVisibility(View.VISIBLE);//设置闹钟标志位显示状态
+
+                            //设置闹钟要传递的数据
+                            notepad.id=id;
+                            //Log.d("my","idsend"+id);
+                            notepad.content = content;
+                            notepad.background=bgId;
+                            notepad.date = date;
+                            notepad.alarm=alarmId;
+                            //Log.d("my","alarmId4"+alarmId);
+                            //传递数据
+                            intentReceiver.putExtra("Alarm",notepad);
+                            // 创建PendingIntent对象
+                            PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
+                            //根据用户选择时间来设置Calendar对象
+                            currentTime.set(Calendar.HOUR_OF_DAY, hour);
+                            currentTime.set(Calendar.MINUTE, minute);
+                            //获取AlarmManager对象
+                            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                            //设置AlarmManager将在Calendar对应时间启动指定组件
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
+
+                            //显示闹钟设置成功的提示信息
+                            Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
                         }
-                        //设置闹钟要传递的数据
-                        //Log.d("my","mIsSave"+mIsSave);
-                        notepad.id=id;
-                        //Log.d("my","idsend"+id);
-                        notepad.content = content;
-                        notepad.background=bgId;
-                        notepad.date = date;
-                        notepad.alarm=alarmId;
-                        //Log.d("my","alarmId4"+alarmId);
-                        //传递数据
-                        intentReceiver.putExtra("Alarm",notepad);
-                        // 创建PendingIntent对象
-                        PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
-                        //根据用户选择时间来设置Calendar对象
-                        currentTime.set(Calendar.HOUR_OF_DAY, hour);
-                        currentTime.set(Calendar.MINUTE, minute);
-                        //获取AlarmManager对象
-                        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        //设置AlarmManager将在Calendar对应时间启动指定组件
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
-
-                        //显示闹钟设置成功的提示信息
-                        Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
-                    }
-                }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
-            }
-        }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH)).show();
+                    }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
+                }
+            }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH)).show();
+        }
     }
 
     //取消闹钟
@@ -500,7 +487,7 @@ public class EditActivity extends BaseActivity {
     }
 
     //保存内容
-    public void saveEdit(){
+    public boolean saveEdit(){
         SQLiteDatabase localSqLiteDatabase = new sqliteHelper(
                 EditActivity.this.context, null, null, 0)
                 .getWritableDatabase();
@@ -511,28 +498,30 @@ public class EditActivity extends BaseActivity {
         if (strContent.equals("")) {
             Toast.makeText(EditActivity.this.context, R.string.PleaseInput,
                     Toast.LENGTH_SHORT).show();
-            return;
+            return false;
+        }else{
+            //String strTitle = strContent.length() > 11 ? "       " + strContent.substring(0, 11) : strContent;
+            localNotepad.setContent(strContent);
+            //localNotepad.setTitle(strTitle);
+            localNotepad.setDate(date);
+            localNotepad.setId(id);
+            localNotepad.setBackground(bgId);
+            localNotepad.setAlarm(alarmId);
+            Log.d("my","alarmId5"+alarmId);
+            if(id==null){
+                long idLong = localChangeSqlite.add(localSqLiteDatabase, localNotepad);
+                id=Long.toString(idLong);
+            }
+            else{
+                localChangeSqlite.update(localSqLiteDatabase, localNotepad);
+            }
+            content=strContent;
+            bgId=localNotepad.getBackground();
+            date=localNotepad.getDate();
+            alarmId=localNotepad.getAlarm();
+            //Log.d("my","idset"+id);
+            return true;
         }
-        //String strTitle = strContent.length() > 11 ? "       " + strContent.substring(0, 11) : strContent;
-        localNotepad.setContent(strContent);
-        //localNotepad.setTitle(strTitle);
-        localNotepad.setDate(date);
-        localNotepad.setId(id);
-        localNotepad.setBackground(bgId);
-        localNotepad.setAlarm(alarmId);
-        Log.d("my","alarmId5"+alarmId);
-        if(id==null){
-            long idLong = localChangeSqlite.add(localSqLiteDatabase, localNotepad);
-            id=Long.toString(idLong);
-        }
-        else{
-            localChangeSqlite.update(localSqLiteDatabase, localNotepad);
-        }
-        content=strContent;
-        bgId=localNotepad.getBackground();
-        date=localNotepad.getDate();
-        alarmId=localNotepad.getAlarm();
-        Log.d("my","idset"+id);
     }
 
     //打开item之后获取图片
