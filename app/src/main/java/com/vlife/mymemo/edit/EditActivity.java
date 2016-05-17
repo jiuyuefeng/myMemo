@@ -220,59 +220,12 @@ public class EditActivity extends BaseActivity {
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar currentTime = Calendar.getInstance();//获取当前时间
-                 currentTime.setTimeInMillis(System.currentTimeMillis());
-                //创建一个DatePickerDialog实例，并把它显示出来
-                new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener(){
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                //设置闹钟
+                setAlarm();
+                //刷新界面
+//                Intent intent=new Intent(EditActivity.this,EditActivity.class);
+//                startActivity(intent);
 
-                        currentTime.set(Calendar.YEAR, year);
-                        currentTime.set(Calendar.MONTH, monthOfYear);
-                        currentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                //创建一个TimePickerDialog实例，并把它显示出来
-                new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                                //指定启动EditActivity组件
-                                Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
-                                intentReceiver.setAction(getString(R.string.MY_ACTION));
-
-                                alarmId=1;//设置闹钟标志位为1（即显示状态）
-
-                                //判断是否已经保存，如果未保存，则先保存
-                                if(!mIsSave){
-                                    saveEdit();
-                                    Log.d("my","isSave"+mIsSave);
-                                    mIsSave=true;
-                                }
-                                //设置闹钟要传递的数据
-                                //Log.d("my","mIsSave"+mIsSave);
-                                notepad.id=id;
-                                Log.d("my","idsend"+id);
-                                notepad.content = content;
-                                notepad.background=bgId;
-                                notepad.date = date;
-                                notepad.alarm=alarmId;
-                                Log.d("my","alarmId4"+alarmId);
-                                //传递数据
-                                intentReceiver.putExtra("Alarm",notepad);
-                                // 创建PendingIntent对象
-                                PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
-                                //根据用户选择时间来设置Calendar对象
-                                currentTime.set(Calendar.HOUR_OF_DAY, hour);
-                                currentTime.set(Calendar.MINUTE, minute);
-                                //获取AlarmManager对象
-                                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                //设置AlarmManager将在Calendar对应时间启动指定组件
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
-
-                                //显示闹钟设置成功的提示信息
-                                Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
-                            }
-                        }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
-                    }
-                }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -290,10 +243,15 @@ public class EditActivity extends BaseActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.edit_alarm:
-                                Toast.makeText(context, "编辑", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "编辑", Toast.LENGTH_SHORT).show();
+                                setAlarm();
+
                                 break;
                             case R.id.delete_alarm:
-                                Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
+                                deleteAlarm();
+                                alarmId=0;
+                                saveEdit();//更新数据库（即编辑闹钟设置）
                                 break;
                         }
                         return false;
@@ -376,6 +334,77 @@ public class EditActivity extends BaseActivity {
                 dlg.show();
             }
         });
+    }
+
+    //设置闹钟
+    public void setAlarm(){
+        final Calendar currentTime = Calendar.getInstance();//获取当前时间
+        currentTime.setTimeInMillis(System.currentTimeMillis());
+        //创建一个DatePickerDialog实例，并把它显示出来
+        new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                currentTime.set(Calendar.YEAR, year);
+                currentTime.set(Calendar.MONTH, monthOfYear);
+                currentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                //创建一个TimePickerDialog实例，并把它显示出来
+                new TimePickerDialog(EditActivity.this,new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        //指定启动EditActivity组件
+                        Intent intentReceiver = new Intent(EditActivity.this,AlarmReceiver.class);
+                        intentReceiver.setAction(getString(R.string.MY_ACTION));
+
+                        alarmId=1;//设置闹钟标志位为1（即显示状态）
+
+                        //判断是否已经保存，如果未保存，则先保存
+                        if(!mIsSave){
+                            saveEdit();
+                            Log.d("my","isSave"+mIsSave);
+                            mIsSave=true;
+                        }
+                        //设置闹钟要传递的数据
+                        //Log.d("my","mIsSave"+mIsSave);
+                        notepad.id=id;
+                        //Log.d("my","idsend"+id);
+                        notepad.content = content;
+                        notepad.background=bgId;
+                        notepad.date = date;
+                        notepad.alarm=alarmId;
+                        //Log.d("my","alarmId4"+alarmId);
+                        //传递数据
+                        intentReceiver.putExtra("Alarm",notepad);
+                        // 创建PendingIntent对象
+                        PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
+                        //根据用户选择时间来设置Calendar对象
+                        currentTime.set(Calendar.HOUR_OF_DAY, hour);
+                        currentTime.set(Calendar.MINUTE, minute);
+                        //获取AlarmManager对象
+                        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        //设置AlarmManager将在Calendar对应时间启动指定组件
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
+
+                        //显示闹钟设置成功的提示信息
+                        Toast.makeText(EditActivity.this, R.string.AlarmSuccess, Toast.LENGTH_SHORT).show();
+                    }
+                }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE),true).show();
+            }
+        }, currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    //取消闹钟
+    public void deleteAlarm(){
+        // Create the same intent, and thus a matching IntentSender, for
+        // the one that was scheduled.
+        Intent intent = new Intent(EditActivity.this,
+                AlarmReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(
+                EditActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // And cancel the alarm.
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        am.cancel(sender);
     }
 
     //导入图片
