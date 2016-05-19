@@ -163,6 +163,4 @@ public class LiveWallpaper extends WallpaperService{
             }
         }
     }
-
-
 }
