@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ChangeWallpaper</string>
+    <string name="description">壁纸切换</string>
+    <string name="wallpaperLabel">ChangeWallpaper</string>
+</resources>

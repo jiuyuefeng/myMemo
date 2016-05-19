@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -25,7 +24,7 @@ public class LiveWallpaper extends WallpaperService{
 
         //加载图片
         bitmap= BitmapFactory.decodeResource(getResources(),R.mipmap.pic1);
-        Log.d("TAG","bitmap"+bitmap);
+        //Log.d("TAG","bitmap"+bitmap);
 
         //返回自定义的Engine
         return new MyEngine();
@@ -41,7 +40,7 @@ public class LiveWallpaper extends WallpaperService{
         //记录当前需要绘制的矩形数量
         private int count=1;
         //记录绘制第一个矩形所需坐标变换的X、Y坐标的偏移
-        private int originX=50,originY=50;
+        private int originX=500,originY=500;
         //定义画笔
         private Paint mPaint=new Paint();
         //定义一个Handler，用于定时更新UI
@@ -94,6 +93,7 @@ public class LiveWallpaper extends WallpaperService{
         public void onTouchEvent(MotionEvent event){
             //如果检测到滑动操作
             if(event.getAction()==MotionEvent.ACTION_MOVE){
+                //获取碰触点左上角的坐标
                 mTouchX=event.getX();
                 mTouchY=event.getY();
             }else{
@@ -106,9 +106,12 @@ public class LiveWallpaper extends WallpaperService{
         private void drawFrame(){
             //获取该壁纸的SurfaceHolder
             final SurfaceHolder holder=getSurfaceHolder();
+//            //定义画布大小
+//            Rect mRect = new Rect(0,0,47,65);
+//            Canvas mCanvas = holder.lockCanvas(mRect);
             Canvas c=null;
             try{
-                //对画布加锁
+                //对画布加锁(锁定画布)
                 c=holder.lockCanvas();
                 if(c!=null){
                     //绘制背景色
@@ -139,8 +142,8 @@ public class LiveWallpaper extends WallpaperService{
                 if(count>=50){
                     Random rand=new Random();
                     count=1;
-                    originX+=(rand.nextInt(60)-30);
-                    originY+=(rand.nextInt(60)-30);
+                    originX+=(rand.nextInt(200)-100);
+                    originY+=(rand.nextInt(200)-100);
                     try{
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -160,5 +163,6 @@ public class LiveWallpaper extends WallpaperService{
             }
         }
     }
+
 
 }
