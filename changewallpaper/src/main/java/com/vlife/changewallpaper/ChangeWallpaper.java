@@ -15,6 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
 /**
+ *  自动切换壁纸
  * Created by Administrator on 2016/5/19 0019.
  */
 public class ChangeWallpaper extends WallpaperService {
@@ -83,7 +84,7 @@ public class ChangeWallpaper extends WallpaperService {
             }
         }
 
-        //缩放图片
+        //缩放图片，使之自适应屏幕
         private Bitmap resizeBitmap(Bitmap bitmap,int newWidth,int newHeight){
             if(bitmap!=null){
                 int oldWidth=bitmap.getWidth();
@@ -107,7 +108,7 @@ public class ChangeWallpaper extends WallpaperService {
 
             //获取手机屏幕大小
             WindowManager windowManager= (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            //int width= windowManager.getDefaultDisplay().getWidth();
+            //int width= windowManager.getDefaultDisplay().getWidth();//该方法已过时
             //int height=windowManager.getDefaultDisplay().getHeight();
             Display display = windowManager.getDefaultDisplay();
             Point size=new Point();
@@ -154,5 +155,4 @@ public class ChangeWallpaper extends WallpaperService {
             }
         }
     }
-
 }
