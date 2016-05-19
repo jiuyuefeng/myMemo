@@ -6,8 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
@@ -55,13 +58,10 @@ public class ChangeWallpaper extends WallpaperService {
         @Override
         public void onCreate(SurfaceHolder surfaceHolder){
             super.onCreate(surfaceHolder);
-            //Log.i("my","开始运行onCreate");
-
             //初始化画笔
-            mPaint.setARGB(76,0,0,255);
-            mPaint.setAntiAlias(true);
-            mPaint.setStyle(Paint.Style.FILL);
-            //Log.d("my","运行了onCreate");
+//            mPaint.setARGB(76,0,0,255);
+//            mPaint.setAntiAlias(true);
+//            mPaint.setStyle(Paint.Style.FILL);
         }
 
         @Override
@@ -69,7 +69,6 @@ public class ChangeWallpaper extends WallpaperService {
             super.onDestroy();
             //删除回调
             mHandler.removeCallbacks(myRunnable);
-            //Log.i("my","运行了onDestroy");
         }
         @Override
         public void onVisibilityChanged(boolean visible){
@@ -108,8 +107,14 @@ public class ChangeWallpaper extends WallpaperService {
 
             //获取手机屏幕大小
             WindowManager windowManager= (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            int width= windowManager.getDefaultDisplay().getWidth();
-            int height=windowManager.getDefaultDisplay().getHeight();
+            //int width= windowManager.getDefaultDisplay().getWidth();
+            //int height=windowManager.getDefaultDisplay().getHeight();
+            Display display = windowManager.getDefaultDisplay();
+            Point size=new Point();
+            display.getSize(size);
+            int width=size.x;
+            int height=size.y;
+            Log.d("TAG","bitmap.size"+width+","+height);
 
             //获取该壁纸的SurfaceHolder
             final SurfaceHolder holder=getSurfaceHolder();
@@ -118,21 +123,14 @@ public class ChangeWallpaper extends WallpaperService {
                 c=holder.lockCanvas();
                 if(c!=null){
                     //绘制背景色
-                    c.drawColor(0xffffffff);
-                    mPaint.setAlpha(255);
-                    //c.scale(100,200);
-                    //设置背景图片
+                    //c.drawColor(0xffffffff);
+                    //设置透明度
+                    //mPaint.setAlpha(255);
+                    //设置壁纸图片
                     for(int i=0;i<count;i++){
-                        //c.scale(c.getWidth(),c.getHeight());
-                        //Bitmap tempBitmap=Bitmap.createBitmap(bitmaps[i],0,0,c.getWidth(),c.getHeight());
-                        //c.drawBitmap(tempBitmap,0,0,mPaint);
                         Bitmap tempBitmap=resizeBitmap(bitmaps[i],width,height);
-                        //Rect mSrcRect=new Rect(0,0,bitmaps[i].getWidth(),bitmaps[i].getHeight());
-                        //Rect mDestRect=new Rect(0,0,bitmaps[i].getWidth(),bitmaps[i].getHeight());
-                        c.drawBitmap(tempBitmap,0,0,mPaint);
-                        //c.drawRect(0,0,150,75,mPaint);//测试是否有画图
+                        c.drawBitmap(tempBitmap,0,0,null);
                     }
-
                 }
             } finally {
                 if(c!=null){
