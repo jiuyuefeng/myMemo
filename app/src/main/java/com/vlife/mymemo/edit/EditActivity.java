@@ -388,14 +388,18 @@ public class EditActivity extends BaseActivity {
                             //传递数据
                             intentReceiver.putExtra("Alarm",notepad);
                             // 创建PendingIntent对象
-                            PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, Integer.parseInt(id), intentReceiver, PendingIntent.FLAG_CANCEL_CURRENT);
+                            PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, Integer.parseInt(id), intentReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
                             //根据用户选择时间来设置Calendar对象
                             currentTime.set(Calendar.HOUR_OF_DAY, hour);
                             currentTime.set(Calendar.MINUTE, minute);
                             //获取AlarmManager对象
                             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-                            if(!currentTime.before(Calendar.getInstance())){//判断时间是否设置合理
+                            long timeSet=currentTime.getTimeInMillis();//获取设定时间（毫秒）
+                            long timeNow=Calendar.getInstance().getTimeInMillis();//获取当前时间（毫秒）
+                            Log.d("time","timeSet"+timeSet);
+                            Log.d("time","timeNow"+timeNow);
+                            if((timeSet+60000)>=timeNow){//判断时间是否设置合理(由于currentTime获取较早，所以需要消除程序运行耗时的影响，即加1秒)
                                 // 设置AlarmManager将在Calendar对应时间启动指定组件
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime.getTimeInMillis(), pi);
                                 alarmId=1;
@@ -420,7 +424,7 @@ public class EditActivity extends BaseActivity {
         Intent intent = new Intent(EditActivity.this,
                 AlarmReceiver.class);
         PendingIntent sender = PendingIntent.getBroadcast(
-                EditActivity.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                EditActivity.this, Integer.parseInt(id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         // And cancel the alarm.
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);

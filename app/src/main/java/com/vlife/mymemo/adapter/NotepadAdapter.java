@@ -137,7 +137,10 @@ public class NotepadAdapter extends BaseAdapter {
         }
     }
 
-    //删除事件响应
+    /**
+     *  删除事件响应
+     *
+     */
     class DeleteButtonListener implements View.OnClickListener {
         private int position;
         public DeleteButtonListener(int position) {
@@ -177,6 +180,10 @@ public class NotepadAdapter extends BaseAdapter {
         }
     }
 
+    /**
+     *  设置显示类
+     *
+     */
     class SetShow {
         public TextViewLine contentListShow;
         public TextView dateListShow;

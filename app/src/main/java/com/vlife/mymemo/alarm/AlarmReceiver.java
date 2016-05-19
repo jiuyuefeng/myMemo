@@ -48,6 +48,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                     setSmallIcon(R.drawable.icon_app).setDefaults(Notification.DEFAULT_ALL).
                     setContentIntent(pendingIntent).setAutoCancel(true);
             manager.notify(1, builder.build());
-            }
+        }
     }
 }
