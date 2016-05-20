@@ -1,1 +1,1 @@
-include ':app', ':livewallpaper', ':changewallpaper'
+include ':mymemo', ':livewallpaper', ':changewallpaper'

@@ -50,7 +50,6 @@ public class LiveWallpaper extends WallpaperService{
             public void run() {
                 //动态画图
                 drawFrame();
-                    //mHandler.postDelayed(this, 1000);//定义一秒执行一次
             }
         };
 
@@ -126,7 +125,8 @@ public class LiveWallpaper extends WallpaperService{
                         c.translate(80,0);
                         c.scale(0.95f,0.95f);
                         c.rotate(20f);
-                        c.drawRect(0,0,150,75,mPaint);
+                        c.drawCircle(0,0,100,mPaint);
+
                     }
                 }
             }
@@ -139,7 +139,7 @@ public class LiveWallpaper extends WallpaperService{
             //调度下一次重绘
             if(mVisible){
                 count++;
-                if(count>=50){
+                if(count>=60){
                     Random rand=new Random();
                     count=1;
                     originX+=(rand.nextInt(200)-100);
@@ -154,7 +154,7 @@ public class LiveWallpaper extends WallpaperService{
                 mHandler.postDelayed(myRunnable,100);
             }
         }
-        //在屏幕碰触点绘制圆圈
+        //在屏幕碰触点绘制图标
         private void drawTouchPoint(Canvas c){
             if(mTouchX>=0&&mTouchY>=0){
                 //设置画笔的透明度

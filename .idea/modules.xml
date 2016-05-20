@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Mymemo2.iml" filepath="$PROJECT_DIR$/Mymemo2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mymemo/app.iml" filepath="$PROJECT_DIR$/mymemo/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/changewallpaper/changewallpaper.iml" filepath="$PROJECT_DIR$/changewallpaper/changewallpaper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/livewallpaper/livewallpaper.iml" filepath="$PROJECT_DIR$/livewallpaper/livewallpaper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mymemo/mymemo.iml" filepath="$PROJECT_DIR$/mymemo/mymemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/livewallpaper/wallpaper.iml" filepath="$PROJECT_DIR$/livewallpaper/wallpaper.iml" />
     </modules>
   </component>

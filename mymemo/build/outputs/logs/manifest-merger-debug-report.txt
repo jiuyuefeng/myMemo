@@ -1,0 +1,111 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:2:1-41:12
+	package
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:3:5-47
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+uses-sdk
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:appcompat-v7:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-v4:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:animated-vector-drawable:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:5:5-44
+MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:support-v4:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-v4:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:20:5-43
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:7:9-38
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:6:9-35
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+		INJECTED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:9:5-67
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:9:22-64
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:10:5-75
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:10:22-72
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:11:5-79
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:11:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:12:5-76
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:12:22-73
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:13:5-81
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:13:22-78
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:14:5-78
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:14:22-75
+uses-permission#android.permission.MANAGE_DOCUMENTS
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:15:5-75
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:15:22-72
+application
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:17:5-39:19
+MERGED from [com.android.support:appcompat-v7:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:animated-vector-drawable:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:support-v4:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.3.0] D:\ASProjects\Mymemo2\mymemo\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\AndroidManifest.xml:22:5-20
+	android:label
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:20:9-41
+	android:supportsRtl
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:21:9-35
+	android:allowBackup
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:18:9-35
+	android:icon
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:19:9-40
+	android:theme
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:22:9-56
+activity#com.vlife.mymemo.mainactivity.MainActivity
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:23:9-29:20
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:23:19-76
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:24:13-28:29
+action#android.intent.action.MAIN
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:25:17-69
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:25:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:27:17-77
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:27:27-74
+activity#com.vlife.mymemo.mainactivity.BaseActivity
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:30:9-79
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:30:19-76
+activity#com.vlife.mymemo.edit.EditActivity
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:31:9-71
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:31:19-68
+receiver#com.vlife.mymemo.alarm.AlarmReceiver
+ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:33:9-37:15
+	android:enabled
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:35:13-35
+	android:exported
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:36:13-36
+	android:name
+		ADDED from D:\ASProjects\Mymemo2\mymemo\src\main\AndroidManifest.xml:34:13-64
